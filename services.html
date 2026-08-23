@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Services — MAB AI Strategies</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="shared.css">
+<style>
+  /* OCEAN station atmosphere — seafoam, depth, soft waves */
+  body { --cyan: #38bdf8; --violet: #0ea5e9; --magenta: #67e8f9; --lime: #a5f3fc; }
+  .page-bg {
+    background:
+      radial-gradient(ellipse 80% 50% at 20% 0%, rgba(14,165,233,0.22), transparent 55%),
+      radial-gradient(ellipse 60% 45% at 90% 80%, rgba(6,78,120,0.45), transparent 50%),
+      radial-gradient(ellipse 50% 30% at 50% 100%, rgba(34,211,238,0.12), transparent 40%),
+      linear-gradient(180deg, #020b14 0%, #041620 40%, #020810 100%) !important;
+  }
+  .page-bg::after {
+    content: "";
+    position: fixed; left: 0; right: 0; bottom: 0; height: 28vh; z-index: 0; pointer-events: none;
+    background:
+      repeating-linear-gradient(
+        90deg,
+        transparent 0,
+        transparent 40px,
+        rgba(56,189,248,0.03) 40px,
+        rgba(56,189,248,0.03) 80px
+      ),
+      linear-gradient(to top, rgba(8,47,73,0.55), transparent);
+    animation: tide 8s ease-in-out infinite alternate;
+  }
+  @keyframes tide { from { transform: translateY(0); opacity: 0.7; } to { transform: translateY(-8px); opacity: 1; } }
+  .card, .tier {
+    background: linear-gradient(165deg, rgba(8,47,73,0.55), rgba(2,12,22,0.75)) !important;
+    border-color: rgba(56,189,248,0.22) !important;
+    backdrop-filter: blur(12px);
+  }
+  .card:hover, .tier.featured { border-color: rgba(103,232,249,0.45) !important; box-shadow: 0 20px 50px rgba(14,165,233,0.15); }
+  .badge { background: linear-gradient(90deg,#0284c7,#22d3ee) !important; }
+
+  .hero h1 { font-size: clamp(2.2rem,5vw,3.3rem); margin: 10px 0 14px; }
+  .hero p { color: var(--dim); font-weight: 300; font-size: 1.08rem; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill,minmax(300px,1fr)); gap: 14px; margin-bottom: 48px; }
+  .card {
+    border-radius: 18px; padding: 22px;
+    background: linear-gradient(160deg,rgba(255,255,255,.05),rgba(255,255,255,.015));
+    border: 1px solid var(--line);
+    transition: transform .3s var(--ease), border-color .3s;
+  }
+  .card:hover { transform: translateY(-3px); border-color: rgba(0,229,255,.3); }
+  .card h3 { font-family: var(--font-d); font-size: 1.2rem; margin-bottom: 8px; }
+  .card > p { color: var(--dim); font-weight: 300; font-size: .95rem; margin-bottom: 12px; }
+  .card ul { padding-left: 16px; color: var(--dim); font-size: .88rem; display: grid; gap: 6px; }
+  .section-title { font-family: var(--font-d); font-size: 1.6rem; margin: 8px 0 16px; }
+  .tiers { display: grid; grid-template-columns: repeat(auto-fit,minmax(260px,1fr)); gap: 14px; }
+  .tier {
+    border-radius: 18px; padding: 24px; border: 1px solid var(--line);
+    background: rgba(255,255,255,.03); position: relative;
+  }
+  .tier.featured { border-color: rgba(124,58,237,.55); box-shadow: 0 0 0 1px rgba(124,58,237,.2), 0 24px 60px rgba(124,58,237,.12); }
+  .badge {
+    position: absolute; top: -10px; left: 20px;
+    font-family: var(--font-m); font-size: 10px; letter-spacing: .14em;
+    padding: 4px 10px; border-radius: 999px;
+    background: linear-gradient(90deg,var(--violet),#a78bfa); color: #fff;
+  }
+  .price { font-family: var(--font-d); font-size: 2rem; margin: 8px 0; }
+  .price span { font-size: .9rem; color: var(--dim); font-family: var(--font-b); }
+  .tier ul { list-style: none; margin: 14px 0 18px; display: grid; gap: 8px; }
+  .tier li { color: var(--dim); font-size: .9rem; padding-left: 18px; position: relative; }
+  .tier li::before { content: "✓"; position: absolute; left: 0; color: var(--cyan); font-size: .75rem; }
+  .stack-block { margin-top: 48px; }
+  .pills { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+  .pills span {
+    font-size: 12px; padding: 7px 12px; border-radius: 999px;
+    border: 1px solid var(--line); color: var(--dim); background: rgba(255,255,255,.02);
+  }
+  .pills.models span { border-color: rgba(0,229,255,.25); color: #b8f4ff; }
+  .pills.agents span { border-color: rgba(124,58,237,.3); color: #d4c4ff; }
+</style>
+</head>
+<body>
+<div class="page-bg"></div>
+<header class="site-nav">
+  <div class="nav-pill">
+    <a class="brand" href="index.html"><span class="brand-orb"></span>MAB<em>·AI</em></a>
+    <a href="index.html">Journey</a>
+    <a class="on" href="services.html">Services</a>
+    <a href="command.html">Command</a>
+    <a href="portal.html">Portal</a>
+    <a class="nav-cta" href="https://calendar.app.google/kuwKF2VrDuyvdfN9A" target="_blank" rel="noopener">Briefing</a>
+  </div>
+</header>
+<main class="page">
+  <div class="page-inner">
+    <header class="hero">
+      <p class="kicker"><span class="dot"></span>STATION 02 · CAPABILITY MATRIX</p>
+      <h1>Instruments for the <span class="grad">agentic enterprise.</span></h1>
+      <p>Every engagement converts operational drag into measurable liquidity. Choose a retainer — or start with a single strike.</p>
+    </header>
+
+    <div class="grid" id="services"></div>
+
+    <h2 class="section-title">Monthly retainers</h2>
+    <div class="tiers" id="tiers"></div>
+
+    <div class="stack-block">
+      <h2 class="section-title">Current stack <span style="color:var(--dim);font-size:1rem;font-weight:400">(Aug 2026)</span></h2>
+      <p class="kicker" style="margin-bottom:8px">Models</p>
+      <div class="pills models" id="models"></div>
+      <p class="kicker" style="margin:18px 0 8px">Agent frameworks</p>
+      <div class="pills agents" id="agents"></div>
+      <p class="kicker" style="margin:18px 0 8px">Systems</p>
+      <div class="pills" id="systems"></div>
+    </div>
+
+    <div style="margin-top:48px" class="glass-frame">
+      <div class="glass-inner" style="display:flex;flex-wrap:wrap;gap:16px;align-items:center;justify-content:space-between">
+        <div>
+          <p class="kicker"><span class="dot"></span>NEXT MOVE</p>
+          <h2 style="font-size:1.6rem;margin-bottom:8px">Price the cost of inaction.</h2>
+          <p class="muted">30 minutes · free · ROI roadmap included</p>
+        </div>
+        <a class="btn primary-solid" href="https://calendar.app.google/kuwKF2VrDuyvdfN9A" target="_blank" rel="noopener">Schedule briefing</a>
+      </div>
+    </div>
+  </div>
+</main>
+<script src="content.js"></script>
+<script>
+(function(){
+  const M=window.MAB;
+  document.getElementById("services").innerHTML = M.services.map(s=>`
+    <article class="card">
+      <h3>${s.name}</h3>
+      <p>${s.blurb}</p>
+      <ul>${s.specs.map(x=>`<li>${x}</li>`).join("")}</ul>
+    </article>`).join("");
+  document.getElementById("tiers").innerHTML = M.tiers.map(t=>`
+    <article class="tier ${t.badge?"featured":""}">
+      ${t.badge?`<span class="badge">${t.badge}</span>`:""}
+      <h3 style="font-family:var(--font-d);font-size:1.3rem">${t.name}</h3>
+      <div class="price">${t.price} <span>${t.unit}</span></div>
+      <p class="muted" style="font-size:.9rem">${t.desc}</p>
+      <ul>${t.features.map(f=>`<li>${f}</li>`).join("")}</ul>
+      <a class="btn" href="${M.contact.cal}" target="_blank" rel="noopener">${t.cta}</a>
+    </article>`).join("");
+  document.getElementById("models").innerHTML = M.stack.models.map(x=>`<span>${x}</span>`).join("");
+  document.getElementById("agents").innerHTML = M.stack.agents.map(x=>`<span>${x}</span>`).join("");
+  document.getElementById("systems").innerHTML = M.stack.systems.map(x=>`<span>${x}</span>`).join("");
+})();
+</script>
+</body>
+</html>

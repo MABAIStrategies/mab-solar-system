@@ -1,0 +1,14 @@
+node_modules/
+.vercel/
+.DS_Store
+Thumbs.db
+*.log
+.env
+.env.*
+!.env.example
+playwright-report/
+test-results/
+qa/screenshots/
+qa/*.png
+qa/*.jpg
+qa/*.webp

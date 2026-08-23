@@ -1,0 +1,57 @@
+{
+  "status": "PASS",
+  "firstPlanet": {
+    "canvasVisible": true,
+    "startProgress": 0,
+    "bodyTheme": ""
+  },
+  "hold": {
+    "remainingAtCaptureMs": 1703,
+    "beforeY": 1400,
+    "duringY": 1400,
+    "releasedY": 1400,
+    "afterReleasedY": 2195
+  },
+  "orbit": {
+    "detail": 1,
+    "orbitX": 0,
+    "progress": 0.5,
+    "meteors": "block",
+    "viewportHeight": 1000,
+    "chapter": {
+      "count": 1,
+      "title": "Cut channels for flow",
+      "top": 336.9050598144531,
+      "bottom": 664.311279296875
+    }
+  },
+  "outboundRiftPower": 0.9991251327237197,
+  "themesCaptured": [
+    "arctic",
+    "lava",
+    "ocean",
+    "desert",
+    "jungle",
+    "city",
+    "singularity"
+  ],
+  "screenshots": [
+    "01-hub-opening.png",
+    "02-lava-station.png",
+    "03-lava-world-entry.png",
+    "04-lava-world-midpoint.png",
+    "05-lava-outbound-rift.png",
+    "06-returned-to-hub.png",
+    "mobile-ocean-midpoint.png",
+    "world-arctic.png",
+    "world-city.png",
+    "world-desert.png",
+    "world-jungle.png",
+    "world-lava.png",
+    "world-ocean.png",
+    "world-singularity.png",
+    "worlds-contact-sheet.png"
+  ],
+  "errors": [],
+  "failedLocalRequests": []
+}
