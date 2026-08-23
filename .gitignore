@@ -12,3 +12,5 @@ qa/screenshots/
 qa/*.png
 qa/*.jpg
 qa/*.webp
+
+.vercel
