@@ -1,0 +1,12 @@
+node_modules
+.vercel
+qa
+tests
+scripts
+assets/research
+assets/worlds/candidates
+assets/worlds/sources
+assets/worlds/source-sheet.jpg
+assets/worlds/final-worlds-sheet.jpg
+package-lock.json
+*.log
