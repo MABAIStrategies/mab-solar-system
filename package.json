@@ -4,13 +4,15 @@
   "private": true,
   "description": "MAB AI Strategies cinematic solar-system journey",
   "scripts": {
-    "serve": "python3 -m http.server 8765",
+    "serve": "node scripts/serve.cjs",
     "test": "npm run test:unit && npm run test:syntax",
-    "test:unit": "node tests/station-hold.test.cjs && node tests/world-data.test.cjs && node tests/content.test.cjs && node tests/roi.test.cjs && node tests/briefing.test.cjs && node tests/wireframes.test.cjs && node tests/hub-topology.test.cjs && node tests/world-journey.test.cjs",
-    "test:syntax": "node --check hub.js && node --check space-scene.js && node --check world-journey.js && node --check world-data.js && node --check station-hold.js && node --check content.js && node --check roi.js && node --check briefing.js && node --check wireframes.js && node --check module-popup.js",
+    "test:unit": "node tests/station-hold.test.cjs && node tests/world-data.test.cjs && node tests/content.test.cjs && node tests/roi.test.cjs && node tests/briefing.test.cjs && node tests/wireframes.test.cjs && node tests/hub-topology.test.cjs && node tests/world-journey.test.cjs && node tests/static-content.test.cjs",
+    "test:syntax": "node --check hub.js && node --check space-scene.js && node --check world-journey.js && node --check world-data.js && node --check station-hold.js && node --check content.js && node --check roi.js && node --check briefing.js && node --check wireframes.js && node --check module-popup.js && node --check flat.js && node --check site.js && node --check pages.js && node --check contact.js && node --check intro.js && node --check scripts/build-static.cjs && node --check scripts/serve.cjs",
     "test:e2e": "node tests/e2e-world-journey.cjs",
     "test:responsive": "node tests/e2e-responsive.cjs",
-    "test:browser": "npm run test:e2e && npm run test:responsive"
+    "test:browser": "npm run test:e2e && npm run test:responsive",
+    "build": "node scripts/build-static.cjs",
+    "test:release": "node tests/release-check.cjs"
   },
   "devDependencies": {
     "playwright-core": "^1.55.0"

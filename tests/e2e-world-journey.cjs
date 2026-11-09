@@ -84,7 +84,7 @@ const OFFER_NAMES = {
         assert.match(brief, /Custom AI Agents/, 'brief lists the added offer');
         assert.match(brief, /Sep 30, 2012 · AlexNet/, 'brief lists visited stops');
         assert.match(brief, /40 people/, 'brief carries the estimate');
-        const mail = await page.getAttribute('a[href^="mailto:"]', 'href');
+        const mail = await page.getAttribute('.mab-brief a[href^="mailto:"]', 'href');
         assert.ok(mail.startsWith('mailto:mark@mabaistrategies.com?subject='));
         assert.equal(await page.getAttribute('.mab-brief a.primary-solid', 'href'), 'https://calendar.app.google/kuwKF2VrDuyvdfN9A');
         await page.screenshot({ path: path.join(qaDir, 'brief.png') });

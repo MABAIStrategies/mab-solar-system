@@ -1,0 +1,19 @@
+# MAB AI Strategies
+
+> MAB AI Strategies LLC is an AI automation consultancy founded by Mark Bockrath. It builds custom AI agents, workflow automation and AI sales systems around the tools a business already runs, for companies of up to about 1,000 employees in any industry.
+
+## Services
+- [Services and pricing](https://mabaistrategies.com/services): AI Readiness Audit ($2,000), Single Workflow or Agent ($3,500+), monthly retainers (Foundation $2,500, Accelerator $5,500, Principal custom).
+- [Systems we build](https://mabaistrategies.com/command): representative agent, workflow, skill and web app patterns.
+
+## Company
+- [About](https://mabaistrategies.com/about): founder background and how an engagement runs.
+- [Contact](https://mabaistrategies.com/contact): email mark@mabaistrategies.com or book a free 30-minute briefing.
+
+## Policies
+- [Privacy Policy](https://mabaistrategies.com/privacy)
+- [Terms of Service](https://mabaistrategies.com/terms)
+- [Refund & Return Policy](https://mabaistrategies.com/refunds)
+
+## Notes
+- The home page is a 3D journey through six moments in AI history. Add `?flat=1` for the same content as plain HTML.

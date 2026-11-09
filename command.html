@@ -3,300 +3,95 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Command — MAB AI Strategies</title>
-<meta name="description" content="Client Command: filterable gallery of agents, skills, workflows, and web apps.">
+<title>Systems we build | MAB AI Strategies</title>
+<meta name="description" content="Representative agents, workflows, skills and web apps from the MAB AI Strategies library. Filter by type and ask for a walkthrough.">
+<link rel="canonical" href="https://mabaistrategies.com/command">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="MAB AI Strategies">
+<meta property="og:title" content="Systems we build | MAB AI Strategies">
+<meta property="og:description" content="Representative agents, workflows, skills and web apps from the MAB AI Strategies library. Filter by type and ask for a walkthrough.">
+<meta property="og:image" content="https://mabaistrategies.com/assets/og.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#05070c">
+<link rel="icon" type="image/png" sizes="32x32" href="/assets/icon-32.png">
+<link rel="icon" type="image/png" sizes="192x192" href="/assets/icon-192.png">
+<link rel="apple-touch-icon" href="/assets/icon-180.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="shared.css">
-<style>
-  /* LUSH / canopy station — living systems gallery */
-  body { --cyan: #4ade80; --violet: #16a34a; --magenta: #86efac; --lime: #bbf7d0; }
-  .page-bg {
-    background:
-      radial-gradient(ellipse 70% 50% at 15% 10%, rgba(34,197,94,0.2), transparent 55%),
-      radial-gradient(ellipse 55% 40% at 85% 70%, rgba(20,83,45,0.5), transparent 50%),
-      radial-gradient(ellipse 40% 30% at 50% 100%, rgba(74,222,128,0.1), transparent 45%),
-      linear-gradient(180deg, #03140a 0%, #052e16 45%, #020a06 100%) !important;
-  }
-  .page-bg::before {
-    content: "";
-    position: fixed; inset: 0; z-index: 0; pointer-events: none; opacity: 0.25;
-    background-image:
-      radial-gradient(1px 1px at 20% 30%, rgba(187,247,208,0.5), transparent),
-      radial-gradient(1px 1px at 70% 60%, rgba(74,222,128,0.4), transparent),
-      radial-gradient(1.5px 1.5px at 40% 80%, rgba(134,239,172,0.35), transparent);
-  }
-  .card, .lock-banner, .visual-strip {
-    background: linear-gradient(165deg, rgba(20,83,45,0.45), rgba(3,20,10,0.8)) !important;
-    border-color: rgba(74,222,128,0.22) !important;
-  }
-  .chip.on {
-    color: #052e16 !important;
-    background: linear-gradient(90deg, #4ade80, #86efac) !important;
-  }
-  .cmd-hero h1 .grad, .grad {
-    background: linear-gradient(92deg, #86efac, #4ade80, #22c55e) !important;
-    -webkit-background-clip: text !important; background-clip: text !important;
-  }
-  .cmd-hero { max-width: 720px; margin-bottom: 36px; }
-  .cmd-hero h1 {
-    font-size: clamp(2.2rem, 5vw, 3.4rem);
-    margin: 10px 0 14px;
-  }
-  .cmd-hero p { color: var(--dim); font-weight: 300; font-size: 1.08rem; max-width: 52ch; }
-
-  .toolbar {
-    display: flex; flex-wrap: wrap; gap: 10px; align-items: center;
-    justify-content: space-between; margin-bottom: 22px;
-  }
-  .filters { display: flex; flex-wrap: wrap; gap: 8px; }
-  .chip {
-    border: 1px solid var(--line); background: rgba(255,255,255,.03);
-    color: var(--dim); padding: 8px 14px; border-radius: 999px;
-    font-size: 12px; font-weight: 500; cursor: pointer;
-    transition: .2s;
-  }
-  .chip:hover { color: #fff; border-color: rgba(0,229,255,.35); }
-  .chip.on {
-    color: #041018; background: linear-gradient(90deg, var(--cyan), #7af0ff);
-    border-color: transparent; font-weight: 600;
-  }
-  .search {
-    min-width: min(260px, 100%);
-    background: rgba(0,0,0,.28); border: 1px solid var(--line);
-    border-radius: 12px; padding: 10px 14px; outline: none;
-  }
-  .search:focus { border-color: rgba(0,229,255,.45); }
-
-  .grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-    gap: 14px;
-  }
-  .card {
-    position: relative;
-    border-radius: 18px;
-    padding: 20px;
-    background: linear-gradient(160deg, rgba(255,255,255,.05), rgba(255,255,255,.015));
-    border: 1px solid var(--line);
-    box-shadow: 0 20px 50px rgba(0,0,0,.25);
-    transition: transform .35s var(--ease), border-color .3s, box-shadow .3s;
-    overflow: hidden;
-    min-height: 190px;
-    display: flex; flex-direction: column;
-  }
-  .card::before {
-    content: "";
-    position: absolute; inset: 0; pointer-events: none;
-    background: radial-gradient(ellipse 80% 60% at var(--mx, 50%) var(--my, 0%), rgba(0,229,255,.1), transparent 55%);
-    opacity: 0; transition: opacity .3s;
-  }
-  .card:hover {
-    transform: translateY(-4px);
-    border-color: rgba(0,229,255,.3);
-    box-shadow: 0 28px 60px rgba(0,0,0,.35), 0 0 40px rgba(0,229,255,.06);
-  }
-  .card:hover::before { opacity: 1; }
-  .card .type {
-    font-family: var(--font-m); font-size: 10px; letter-spacing: .18em;
-    color: var(--cyan); text-transform: uppercase; margin-bottom: 10px;
-  }
-  .card h3 { font-family: var(--font-d); font-size: 1.15rem; margin-bottom: 8px; letter-spacing: -.02em; }
-  .card p { color: var(--dim); font-size: .92rem; font-weight: 300; flex: 1; }
-  .tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 14px; }
-  .tags i {
-    font-style: normal; font-size: 11px; padding: 4px 8px; border-radius: 999px;
-    border: 1px solid var(--line); color: var(--faint);
-  }
-
-  /* Lock overlay for non-clients */
-  .lock-banner {
-    margin-bottom: 22px; padding: 16px 18px; border-radius: 16px;
-    border: 1px solid rgba(124,58,237,.35);
-    background: linear-gradient(135deg, rgba(124,58,237,.12), rgba(0,229,255,.06));
-    display: flex; flex-wrap: wrap; gap: 12px; align-items: center; justify-content: space-between;
-  }
-  .lock-banner p { color: var(--dim); font-size: .92rem; font-weight: 300; max-width: 52ch; }
-  .lock-banner code {
-    font-family: var(--font-m); color: var(--lime); font-size: 12px;
-  }
-  .grid.locked .card {
-    filter: blur(5px); opacity: .55; pointer-events: none; user-select: none;
-  }
-  .empty { color: var(--dim); padding: 40px 0; text-align: center; }
-
-  .visual-strip {
-    height: 140px; border-radius: 20px; margin-bottom: 28px;
-    position: relative; overflow: hidden;
-    border: 1px solid var(--line);
-    background: #070a12;
-  }
-  .visual-strip canvas { width: 100%; height: 100%; display: block; }
-</style>
+<link rel="stylesheet" href="/shared.css">
 </head>
 <body>
-<div class="page-bg" aria-hidden="true"></div>
-<header class="site-nav">
-  <div class="nav-pill">
-    <a class="brand" href="index.html"><span class="brand-orb"></span>MAB<em>·AI</em></a>
-    <a href="index.html">Journey</a>
-    <a href="services.html">Services</a>
-    <a class="on" href="command.html">Command</a>
-    <a href="portal.html">Portal</a>
-    <a class="nav-cta" href="https://calendar.app.google/kuwKF2VrDuyvdfN9A" target="_blank" rel="noopener">Briefing</a>
-  </div>
+<div class="page-bg"></div>
+<a class="skip-link" href="#main">Skip to content</a>
+<!-- nav:start -->
+<header class="site-nav" id="site-nav">
+  <nav class="nav-pill" aria-label="Main">
+    <a class="brand" href="/" aria-label="MAB AI Strategies home"><img src="/assets/mab-logo-256.png" alt="" width="30" height="30"><span>MAB <em>AI Strategies</em></span></a>
+    <a href="/">Journey</a>
+    <a href="/services">Services</a>
+    <a class="on" aria-current="page" href="/command">Systems</a>
+    <a href="/about">About</a>
+    <a href="/portal">Client billing</a>
+    <a class="nav-cta show-m" href="https://calendar.app.google/kuwKF2VrDuyvdfN9A" target="_blank" rel="noopener">Briefing</a>
+  </nav>
 </header>
-
-<main class="page">
+<!-- nav:end -->
+<main class="page" id="main" tabindex="-1">
   <div class="page-inner">
-    <div class="visual-strip" aria-hidden="true"><canvas id="cmd-viz"></canvas></div>
-
-    <header class="cmd-hero">
-      <p class="kicker"><span class="dot"></span>CLIENT COMMAND · STATION 04</p>
-      <h1>A living gallery of <span class="grad">systems that ship.</span></h1>
-      <p>Filterable library of agents, skills, workflows, and web apps — evolving as the practice deploys new work. Paying clients unlock full detail.</p>
+    <header class="prose">
+      <p class="kicker"><span class="dot"></span>Representative system patterns</p>
+      <h1>Systems we build, <span class="grad">ready to adapt.</span></h1>
+      <p>These are patterns from our library, not client case studies. Each one gets fitted to your tools and your process before it ships.</p>
     </header>
-
-    <div class="lock-banner" id="lock-banner">
-      <div>
-        <strong style="display:block;margin-bottom:4px">Vault status</strong>
-        <p id="lock-copy">Preview mode — unlock with client key or portal session.</p>
-      </div>
-      <div style="display:flex;gap:8px;flex-wrap:wrap">
-        <button class="btn" type="button" id="unlock-btn">Unlock vault</button>
-        <a class="btn ghost" href="portal.html">Via Portal</a>
-      </div>
-    </div>
-
     <div class="toolbar">
-      <div class="filters" id="filters"></div>
-      <input class="search" id="search" type="search" placeholder="Search systems…" aria-label="Search">
+      <div class="filters" id="filters" role="group" aria-label="Filter by type"></div>
+      <input class="search" id="search" type="search" placeholder="Search systems…" aria-label="Search systems">
     </div>
-    <div class="grid" id="grid"></div>
+    <div class="card-grid" id="grid" aria-live="polite"></div>
+    <div class="glass-frame cta-band">
+      <div class="glass-inner">
+        <div>
+          <p class="kicker"><span class="dot"></span>See one in your stack</p>
+          <h2>Tell us the workflow. We'll show you the pattern that fits.</h2>
+        </div>
+        <a class="btn primary-solid" data-track="booking_clicked" href="https://calendar.app.google/kuwKF2VrDuyvdfN9A" target="_blank" rel="noopener">Walk me through it</a>
+      </div>
+    </div>
   </div>
 </main>
-
-<div class="mab-toast" id="toast"></div>
-<script src="content.js"></script>
-<script>
-(function(){
-  const M = window.MAB;
-  const filters = ["All","Agent","Workflow","Skill","Web App"];
-  const fEl = document.getElementById("filters");
-  const grid = document.getElementById("grid");
-  const search = document.getElementById("search");
-  const lockCopy = document.getElementById("lock-copy");
-  let filter = "All";
-  let q = "";
-
-  function unlocked(){
-    return localStorage.getItem("mab_vault_auth")==="1" || localStorage.getItem("mab_portal_auth")==="1";
-  }
-  function toast(msg){
-    const t=document.getElementById("toast");
-    t.textContent=msg; t.classList.add("show");
-    setTimeout(()=>t.classList.remove("show"),2800);
-  }
-  function syncLock(){
-    const ok = unlocked();
-    grid.classList.toggle("locked", !ok);
-    lockCopy.innerHTML = ok
-      ? 'Unlocked · full system cards visible. <button class="btn ghost" style="margin-left:8px;padding:6px 10px" id="relock" type="button">Lock</button>'
-      : 'Preview mode — demo key <code>mab-client</code> or portal password <code>demo</code>.';
-    const relock=document.getElementById("relock");
-    if(relock) relock.onclick=()=>{ localStorage.removeItem("mab_vault_auth"); syncLock(); paint(); };
-  }
-
-  filters.forEach((f,i)=>{
-    const b=document.createElement("button");
-    b.type="button"; b.className="chip"+(i===0?" on":""); b.textContent=f;
-    b.onclick=()=>{
-      filter=f;
-      fEl.querySelectorAll(".chip").forEach(c=>c.classList.remove("on"));
-      b.classList.add("on");
-      paint();
-    };
-    fEl.appendChild(b);
-  });
-
-  function paint(){
-    const items = M.vaultItems.filter(v=>{
-      const ft = filter==="All" || v.type===filter;
-      const qq = !q || (v.name+" "+v.blurb+" "+v.tags.join(" ")).toLowerCase().includes(q);
-      return ft && qq;
-    });
-    if(!items.length){
-      grid.innerHTML = '<p class="empty">No systems match.</p>';
-      return;
-    }
-    grid.innerHTML = items.map(v=>`
-      <article class="card">
-        <div class="type">${v.type}</div>
-        <h3>${v.name}</h3>
-        <p>${v.blurb}</p>
-        <div class="tags">${v.tags.map(t=>`<i>${t}</i>`).join("")}</div>
-      </article>`).join("");
-    grid.querySelectorAll(".card").forEach(card=>{
-      card.addEventListener("pointermove",e=>{
-        const r=card.getBoundingClientRect();
-        card.style.setProperty("--mx", ((e.clientX-r.left)/r.width*100)+"%");
-        card.style.setProperty("--my", ((e.clientY-r.top)/r.height*100)+"%");
-      });
-    });
-  }
-
-  search.addEventListener("input",()=>{ q=search.value.trim().toLowerCase(); paint(); });
-  document.getElementById("unlock-btn").onclick=()=>{
-    const k=prompt("Client key");
-    if(k==="mab-client"){ localStorage.setItem("mab_vault_auth","1"); syncLock(); paint(); toast("Vault unlocked"); }
-    else if(k!==null) alert("Try: mab-client");
-  };
-
-  syncLock(); paint();
-
-  // High-fidelity mini ribbon viz (smooth gradient geometry, not pixels)
-  const c=document.getElementById("cmd-viz");
-  const ctx=c.getContext("2d");
-  let w,h,t=0;
-  function resize(){
-    const r=c.parentElement.getBoundingClientRect();
-    w=r.width; h=r.height;
-    const dpr=Math.min(devicePixelRatio||1,2);
-    c.width=w*dpr; c.height=h*dpr;
-    ctx.setTransform(dpr,0,0,dpr,0,0);
-  }
-  resize(); addEventListener("resize",resize);
-  function frame(){
-    t+=0.008;
-    ctx.clearRect(0,0,w,h);
-    const g=ctx.createLinearGradient(0,0,w,h);
-    g.addColorStop(0,"#0a1020"); g.addColorStop(1,"#0c0614");
-    ctx.fillStyle=g; ctx.fillRect(0,0,w,h);
-    for(let layer=0; layer<5; layer++){
-      ctx.beginPath();
-      for(let x=0;x<=w;x+=2){
-        const y=h*0.5
-          + Math.sin(x*0.012 + t*1.4 + layer)* (12+layer*4)
-          + Math.sin(x*0.03 - t + layer*0.7)* (6+layer*2);
-        if(x===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
-      }
-      const cols=["rgba(0,229,255,.55)","rgba(124,58,237,.45)","rgba(255,61,138,.4)","rgba(174,234,0,.35)","rgba(255,213,74,.3)"];
-      ctx.strokeStyle=cols[layer];
-      ctx.lineWidth=2.2 - layer*0.25;
-      ctx.lineJoin="round"; ctx.lineCap="round";
-      ctx.stroke();
-    }
-    // soft orbs
-    for(let i=0;i<6;i++){
-      const x=w*(0.1+i*0.15)+Math.sin(t+i)*20;
-      const y=h*0.5+Math.cos(t*1.2+i)*18;
-      const rg=ctx.createRadialGradient(x,y,0,x,y,28);
-      rg.addColorStop(0,"rgba(0,229,255,.35)"); rg.addColorStop(1,"transparent");
-      ctx.fillStyle=rg; ctx.beginPath(); ctx.arc(x,y,28,0,Math.PI*2); ctx.fill();
-    }
-    requestAnimationFrame(frame);
-  }
-  frame();
-})();
-</script>
+<!-- footer:start -->
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <img src="/assets/mab-logo-256.png" alt="" width="44" height="44" loading="lazy">
+      <p><strong>MAB AI Strategies LLC</strong><br>Converting chaos into consistency, and consistency into currency.</p>
+    </div>
+    <nav aria-label="Site">
+      <a href="/">Journey</a>
+      <a href="/services">Services</a>
+      <a href="/command">Systems</a>
+      <a href="/about">About</a>
+      <a href="/contact">Contact</a>
+      <a href="/portal">Client billing</a>
+    </nav>
+    <nav aria-label="Connect">
+      <a href="mailto:mark@mabaistrategies.com">mark@mabaistrategies.com</a>
+      <a href="https://calendar.app.google/kuwKF2VrDuyvdfN9A" target="_blank" rel="noopener">Book a briefing</a>
+      <a href="https://www.linkedin.com/in/mark-bockrath-a5a1b2196/" target="_blank" rel="noopener">LinkedIn</a>
+      <a href="https://x.com/mab_ai_CEO" target="_blank" rel="noopener">X</a>
+    </nav>
+    <nav aria-label="Legal">
+      <a href="/privacy">Privacy Policy</a>
+      <a href="/terms">Terms of Service</a>
+      <a href="/refunds">Refund &amp; Return Policy</a>
+    </nav>
+  </div>
+  <p class="footer-legal">© 2026 MAB AI Strategies LLC</p>
+</footer>
+<!-- footer:end -->
+<script src="/content.js"></script>
+<script src="/pages.js"></script>
+<script src="/site.js"></script>
 </body>
 </html>

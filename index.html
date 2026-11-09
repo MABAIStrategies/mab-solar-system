@@ -3,14 +3,31 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MAB AI Strategies — Through the Dark</title>
-<meta name="description" content="A first-person journey through the MAB solar system. Custom AI agents, autonomous workflows, measurable ROI.">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='28' fill='%23030a16' stroke='%2355ddff' stroke-width='3'/%3E%3Cpath d='M16 42V21l16 14 16-14v21' fill='none' stroke='%23eefcff' stroke-width='5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<title>MAB AI Strategies | AI agents, automation and sales systems</title>
+<meta name="description" content="MAB AI Strategies builds custom AI agents, workflow automation and AI sales systems around the tools you already run. Travel the AI timeline, size your opportunity, book a briefing.">
+<link rel="canonical" href="https://mabaistrategies.com/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="MAB AI Strategies">
+<meta property="og:title" content="MAB AI Strategies | AI agents, automation and sales systems">
+<meta property="og:description" content="Six moments that changed what software can do, and what each one means for your business.">
+<meta property="og:url" content="https://mabaistrategies.com/">
+<meta property="og:image" content="https://mabaistrategies.com/assets/og.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#05070c">
+<link rel="icon" type="image/png" sizes="32x32" href="/assets/icon-32.png">
+<link rel="icon" type="image/png" sizes="192x192" href="/assets/icon-192.png">
+<link rel="apple-touch-icon" href="/assets/icon-180.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="shared.css">
 <link rel="stylesheet" href="worlds.css">
+<script src="flat.js"></script>
+<!-- jsonld:start -->
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Organization","name":"MAB AI Strategies LLC","url":"https://mabaistrategies.com/","logo":"https://mabaistrategies.com/assets/mab-logo.png","slogan":"Converting chaos into consistency, and consistency into currency.","email":"mark@mabaistrategies.com","sameAs":["https://www.linkedin.com/in/mark-bockrath-a5a1b2196/","https://x.com/mab_ai_CEO"],"founder":{"@type":"Person","name":"Mark Bockrath"}}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Person","name":"Mark Bockrath","jobTitle":"Founder & CEO","worksFor":{"@type":"Organization","name":"MAB AI Strategies LLC","url":"https://mabaistrategies.com/"},"image":"https://mabaistrategies.com/assets/mark-bockrath.jpg","sameAs":["https://www.linkedin.com/in/mark-bockrath-a5a1b2196/","https://x.com/mab_ai_CEO"]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Service","name":"AI Readiness Audit","description":"Before anything gets automated, we find where the hours actually go. You get a ranked list of what's worth automating and what isn't.","provider":{"@type":"Organization","name":"MAB AI Strategies LLC","url":"https://mabaistrategies.com/"},"url":"https://mabaistrategies.com/services"},{"@type":"Service","name":"Custom AI Agents","description":"Agents built for one job in your business, wired into your tools, with a person approving the calls that need judgment.","provider":{"@type":"Organization","name":"MAB AI Strategies LLC","url":"https://mabaistrategies.com/"},"url":"https://mabaistrategies.com/services"},{"@type":"Service","name":"Fractional AI Architecture","description":"Senior AI leadership without the full-time hire. Strategy, stack decisions and build ownership from one accountable person.","provider":{"@type":"Organization","name":"MAB AI Strategies LLC","url":"https://mabaistrategies.com/"},"url":"https://mabaistrategies.com/services"},{"@type":"Service","name":"AI Sales Systems","description":"Research, outreach and pipeline hygiene handled by the system, so reps spend their time in conversations.","provider":{"@type":"Organization","name":"MAB AI Strategies LLC","url":"https://mabaistrategies.com/"},"url":"https://mabaistrategies.com/services"},{"@type":"Service","name":"Conversion Web Experiences","description":"Sites like this one: built to hold attention, explain the offer and hand you a prepared conversation.","provider":{"@type":"Organization","name":"MAB AI Strategies LLC","url":"https://mabaistrategies.com/"},"url":"https://mabaistrategies.com/services"},{"@type":"Service","name":"Workflow Automation","description":"The repetitive work between your systems, run automatically: intake, handoffs, follow-up and reporting.","provider":{"@type":"Organization","name":"MAB AI Strategies LLC","url":"https://mabaistrategies.com/"},"url":"https://mabaistrategies.com/services"}]}</script>
+<!-- jsonld:end -->
 <style>
   html.lenis, html.lenis body { height: auto; }
   .lenis.lenis-smooth { scroll-behavior: auto !important; }
@@ -748,7 +765,8 @@
   }
 </style>
 </head>
-<body>
+<body class="journey-page">
+<a class="skip-link" href="/?flat=1">Skip the journey: read the page instead</a>
 <!-- INTRO / LOADER — cinematic MP4 bumper, journey boots underneath -->
 <div id="intro" role="dialog" aria-label="MAB AI Strategies intro" aria-live="polite">
   <video
@@ -756,17 +774,16 @@
     id="intro-video"
     playsinline
     muted
-    preload="auto"
+    preload="none"
     poster="assets/intro-poster.jpg"
+    data-src="assets/intro.mp4"
     aria-label="MAB AI Strategies opening cinematic"
-  >
-    <source src="assets/intro.mp4" type="video/mp4">
-  </video>
+  ></video>
   <div class="intro-vignette" aria-hidden="true"></div>
   <div class="intro-bg" aria-hidden="true"></div>
   <div class="intro-stars" aria-hidden="true"></div>
 
-  <div class="intro-brand-mark" aria-hidden="true"><i></i> MAB · AI</div>
+  <div class="intro-brand-mark" aria-hidden="true"><i></i> MAB AI STRATEGIES</div>
 
   <!-- Fallback when reduced-motion or video fails -->
   <div class="intro-stage" aria-hidden="true">
@@ -794,22 +811,151 @@
 
 <canvas id="space-canvas" aria-hidden="true"></canvas>
 
+<!-- nav:start -->
 <header class="site-nav" id="site-nav">
-  <div class="nav-pill">
-    <a class="brand" href="index.html"><span class="brand-orb"></span>MAB<em>·AI</em></a>
-    <a class="on" href="index.html">Journey</a>
-    <a href="services.html">Services</a>
-    <a href="command.html">Command</a>
-    <a href="portal.html">Portal</a>
-    <a class="nav-cta" href="https://calendar.app.google/kuwKF2VrDuyvdfN9A" target="_blank" rel="noopener">Briefing</a>
-  </div>
+  <nav class="nav-pill" aria-label="Main">
+    <a class="brand" href="/" aria-label="MAB AI Strategies home"><img src="/assets/mab-logo-256.png" alt="" width="30" height="30"><span>MAB <em>AI Strategies</em></span></a>
+    <a class="on" aria-current="page" href="/">Journey</a>
+    <a href="/services">Services</a>
+    <a href="/command">Systems</a>
+    <a href="/about">About</a>
+    <a href="/portal">Client billing</a>
+    <a class="nav-cta show-m" href="https://calendar.app.google/kuwKF2VrDuyvdfN9A" target="_blank" rel="noopener">Briefing</a>
+  </nav>
 </header>
+<!-- nav:end -->
+
+<!-- timeline:start -->
+<main id="timeline" class="timeline" tabindex="-1">
+  <header class="tl-hero">
+    <img src="/assets/mab-logo.png" alt="MAB AI Strategies" width="160" height="160">
+    <h1>Converting chaos into consistency, and consistency into currency.</h1>
+    <p>Custom AI agents, automated workflows and sales systems, built around the tools you already run and measured in hours and dollars.</p>
+    <p class="tl-lede">Six moments that changed what software can do, and what each one means for your business.</p>
+    <div class="tl-hero-actions">
+      <a class="btn primary-solid" href="https://calendar.app.google/kuwKF2VrDuyvdfN9A" target="_blank" rel="noopener">Book a briefing</a>
+      <a class="btn" href="/?flat=0" data-launch-journey>Launch the 3D journey</a>
+    </div>
+  </header>
+  <div class="tl-stops">
+    <article class="tl-stop" id="stop-origin" data-station="origin" style="--tl-accent:#8fe8ff">
+      <p class="tl-kicker">Stop 01 · AlexNet</p>
+      <h2><time datetime="2012-09-30">Sep 30, 2012</time></h2>
+      <p class="tl-caption">AlexNet is entered in the ImageNet challenge and beats the runner-up by more than ten points: machines learn to see. <a class="tl-source" href="https://image-net.org/challenges/LSVRC/2012/" target="_blank" rel="noopener">Source</a></p>
+      <div class="tl-offer">
+        <h3>AI Readiness Audit</h3>
+        <p>Before anything gets automated, we find where the hours actually go. You get a ranked list of what's worth automating and what isn't.</p>
+        <ul><li>Process review and bottleneck sizing</li><li>Automation roadmap ranked by return</li><li>Executive readout call included</li></ul>
+        <a class="btn" href="/services">See services and pricing</a>
+      </div>
+    </article>
+    <article class="tl-stop" id="stop-mechanism" data-station="mechanism" style="--tl-accent:#ff7a18">
+      <p class="tl-kicker">Stop 02 · Move 37</p>
+      <h2><time datetime="2016-03-10">Mar 10, 2016</time></h2>
+      <p class="tl-caption">In game two against Lee Sedol, AlphaGo plays Move 37, a move no human would have chosen. <a class="tl-source" href="https://www.blog.google/technology/ai/alphagos-ultimate-challenge/" target="_blank" rel="noopener">Source</a></p>
+      <div class="tl-offer">
+        <h3>Custom AI Agents</h3>
+        <p>Agents built for one job in your business, wired into your tools, with a person approving the calls that need judgment.</p>
+        <ul><li>Multi-step reasoning and tool use</li><li>Human review points and audit logs</li><li>Built on your stack, not bolted on top</li></ul>
+        <a class="btn" href="/services">See services and pricing</a>
+      </div>
+    </article>
+    <article class="tl-stop" id="stop-services" data-station="services" style="--tl-accent:#36e6ff">
+      <p class="tl-kicker">Stop 03 · The Transformer</p>
+      <h2><time datetime="2017-06-12">Jun 12, 2017</time></h2>
+      <p class="tl-caption">“Attention Is All You Need” introduces the Transformer, the architecture everything since is built on. <a class="tl-source" href="https://arxiv.org/abs/1706.03762" target="_blank" rel="noopener">Source</a></p>
+      <div class="tl-offer">
+        <h3>Fractional AI Architecture</h3>
+        <p>Senior AI leadership without the full-time hire. Strategy, stack decisions and build ownership from one accountable person.</p>
+        <ul><li>Strategy through deployment ownership</li><li>Vendor-neutral stack selection</li><li>Governance your security team can sign off on</li></ul>
+        <a class="btn" href="/services">See services and pricing</a>
+      </div>
+    </article>
+    <article class="tl-stop" id="stop-proof" data-station="proof" style="--tl-accent:#ffbf58">
+      <p class="tl-kicker">Stop 04 · Cicero</p>
+      <h2><time datetime="2022-11-22">Nov 22, 2022</time></h2>
+      <p class="tl-caption">Meta's Cicero reaches human-level play in Diplomacy by negotiating in plain language. <a class="tl-source" href="https://doi.org/10.1126/science.ade9097" target="_blank" rel="noopener">Source</a></p>
+      <div class="tl-offer">
+        <h3>AI Sales Systems</h3>
+        <p>Research, outreach and pipeline hygiene handled by the system, so reps spend their time in conversations.</p>
+        <ul><li>Account research and first-touch drafts</li><li>CRM enrichment, scoring and next steps</li><li>Sequences with human approval gates</li></ul>
+        <a class="btn" href="/services">See services and pricing</a>
+      </div>
+    </article>
+    <article class="tl-stop" id="stop-command" data-station="command" style="--tl-accent:#9dff63">
+      <p class="tl-kicker">Stop 05 · ChatGPT</p>
+      <h2><time datetime="2022-11-30">Nov 30, 2022</time></h2>
+      <p class="tl-caption">ChatGPT launches as a free research preview and the interface makes the model matter. <a class="tl-source" href="https://openai.com/index/chatgpt/" target="_blank" rel="noopener">Source</a></p>
+      <div class="tl-offer">
+        <h3>Conversion Web Experiences</h3>
+        <p>Sites like this one: built to hold attention, explain the offer and hand you a prepared conversation.</p>
+        <ul><li>Scroll-driven 3D storytelling</li><li>Built-in scheduling and lead capture</li><li>Fast on mobile, measured end to end</li></ul>
+        <a class="btn" href="/services">See services and pricing</a>
+      </div>
+    </article>
+    <article class="tl-stop" id="stop-enterprise" data-station="enterprise" style="--tl-accent:#67d5ff">
+      <p class="tl-kicker">Stop 06 · Model Context Protocol</p>
+      <h2><time datetime="2024-11-25">Nov 25, 2024</time></h2>
+      <p class="tl-caption">Anthropic open-sources the Model Context Protocol and agents plug into the tools where work lives. <a class="tl-source" href="https://www.anthropic.com/news/model-context-protocol" target="_blank" rel="noopener">Source</a></p>
+      <div class="tl-offer">
+        <h3>Workflow Automation</h3>
+        <p>The repetitive work between your systems, run automatically: intake, handoffs, follow-up and reporting.</p>
+        <ul><li>Runs around the clock with failure recovery</li><li>Connects CRM, inbox, sheets and ERP</li><li>Every run logged and measurable</li></ul>
+        <a class="btn" href="/services">See services and pricing</a>
+      </div>
+    </article>
+    <article class="tl-stop" id="stop-convergence" data-station="convergence" style="--tl-accent:#ffe278">
+      <p class="tl-kicker">Stop 07 · Today</p>
+      <h2><time data-live-date>Today</time></h2>
+      <p class="tl-caption">The next entry on this timeline is yours.</p>
+      <div class="tl-offer">
+        <h3>Strategic Briefing</h3>
+        <p>Thirty minutes with Mark on your workflow. You leave with a roadmap whether you hire us or not.</p>
+        <ul><li>30 minutes · free · ROI roadmap included</li><li>Bring the brief you built on the way here</li><li>No obligation</li></ul>
+        <a class="btn primary-solid" href="https://calendar.app.google/kuwKF2VrDuyvdfN9A" target="_blank" rel="noopener">Book the briefing</a>
+      </div>
+    </article>
+  </div>
+  <section class="tl-proof" aria-label="Track record">
+    <ul><li><strong>$12M+ ARR generated</strong><span>Founder's career record</span></li><li><strong>#2 national ranking</strong><span>Founder's career record</span></li><li><strong>750+ enterprise accounts</strong><span>Founder's career record</span></li><li><strong>100+ AI agents</strong><span>Built at MAB</span></li><li><strong>300+ business automations</strong><span>Built at MAB</span></li></ul>
+  </section>
+</main>
+<!-- timeline:end -->
+<!-- footer:start -->
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <img src="/assets/mab-logo-256.png" alt="" width="44" height="44" loading="lazy">
+      <p><strong>MAB AI Strategies LLC</strong><br>Converting chaos into consistency, and consistency into currency.</p>
+    </div>
+    <nav aria-label="Site">
+      <a href="/">Journey</a>
+      <a href="/services">Services</a>
+      <a href="/command">Systems</a>
+      <a href="/about">About</a>
+      <a href="/contact">Contact</a>
+      <a href="/portal">Client billing</a>
+    </nav>
+    <nav aria-label="Connect">
+      <a href="mailto:mark@mabaistrategies.com">mark@mabaistrategies.com</a>
+      <a href="https://calendar.app.google/kuwKF2VrDuyvdfN9A" target="_blank" rel="noopener">Book a briefing</a>
+      <a href="https://www.linkedin.com/in/mark-bockrath-a5a1b2196/" target="_blank" rel="noopener">LinkedIn</a>
+      <a href="https://x.com/mab_ai_CEO" target="_blank" rel="noopener">X</a>
+    </nav>
+    <nav aria-label="Legal">
+      <a href="/privacy">Privacy Policy</a>
+      <a href="/terms">Terms of Service</a>
+      <a href="/refunds">Refund &amp; Return Policy</a>
+    </nav>
+  </div>
+  <p class="footer-legal">© 2026 MAB AI Strategies LLC</p>
+</footer>
+<!-- footer:end -->
 
 <nav class="journey-rail" id="journey-rail" aria-label="Stations"></nav>
 
 <!-- Cold open: already in space, no agency card -->
 <div class="cold-hud" id="cold-hud">
-  <div class="brand-float"><i></i> MAB · AI</div>
   <div class="embark">
     <p>Scroll to travel</p>
     <div class="scroll-glyph"><b></b></div>
@@ -868,7 +1014,7 @@
   <section class="runway-stop runway-exit" data-id="exit" data-idx="6" aria-label="Journey end"></section>
 </div>
 
-<p class="cursor-hint">A crewed probe may cross your path — intercept for a real client result.</p>
+<p class="cursor-hint">A crewed probe may cross your path. Intercept it for a field tip.</p>
 
 <div id="anomaly-reward" role="dialog" aria-modal="true" aria-labelledby="reward-title">
   <div class="reward">
@@ -881,7 +1027,7 @@
     <div class="loot" id="reward-loot" hidden></div>
     <div class="actions">
       <a class="btn primary-solid" id="reward-cal" href="https://calendar.app.google/kuwKF2VrDuyvdfN9A" target="_blank" rel="noopener">Book the briefing</a>
-      <a class="btn" href="command.html">Open Command</a>
+      <a class="btn" href="/command">See systems we build</a>
       <button class="btn ghost" type="button" id="reward-close">Keep flying</button>
     </div>
   </div>
@@ -890,6 +1036,7 @@
 <div class="mab-toast" id="toast"></div>
 
 <!-- Intro first (instant paint), then heavy stage loads underneath -->
+<script src="site.js"></script>
 <script src="intro.js"></script>
 <script>
 (function () {
@@ -920,6 +1067,8 @@
     });
   }
   (async function () {
+    // Flat mode shows the static timeline; none of the 3D stage is loaded.
+    if (window.MABFlat && window.MABFlat.isActive()) return;
     const n = paths.length;
     for (let i = 0; i < n; i++) {
       try {

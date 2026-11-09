@@ -518,19 +518,19 @@
   // Anomaly copy
   const LOOT = [
     {
-      title: "A working hiring agent",
-      body: "One client got 15 hours a week back — about $40K a year in reclaimed focus — after we put an autonomous hiring agent on their desk.",
-      detail: "That’s one deployment. Measured in hours and dollars, not slides.",
+      title: "Start with one workflow",
+      body: "Don’t open with a broad AI program. Pick the one handoff your team repeats every day and automate that first. It’s narrow enough to ship fast and important enough to measure.",
+      detail: "That’s how every engagement here starts.",
     },
     {
-      title: "Why the ROI isn’t theoretical",
-      body: "Across 250+ builds we’ve documented $12M+ in B2B revenue impact. Median payback on Accelerator work is under 90 days.",
-      detail: "Full case library lives in Client Command for active clients.",
+      title: "Price the hours first",
+      body: "People doing the work × manual hours a week × 48 weeks. That number tells you whether a workflow is worth automating before anyone writes a line of code.",
+      detail: "The first stop on the timeline has an estimator that does the math with you.",
     },
     {
       title: "Skip the queue",
-      body: "You intercepted a field probe — use it. Book the free 30-minute strategic briefing and mention the intercept for priority routing.",
-      detail: "No pitch theater. You leave with a cost-of-inaction map either way.",
+      body: "You intercepted a field probe, so use it. Book the free 30-minute briefing and mention the intercept.",
+      detail: "You leave with a roadmap either way.",
     },
   ];
 

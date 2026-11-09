@@ -151,8 +151,8 @@
       </form>`;
   }
 
-  function wireEstimator(briefing) {
-    const form = body.querySelector(".mab-estimator");
+  function wireEstimator(briefing, scope) {
+    const form = (scope || body).querySelector(".mab-estimator");
     const roi = window.MABRoi;
     if (!form || !roi) return;
     let touched = false;
@@ -345,5 +345,12 @@
     true
   );
 
-  window.MABModule = { open, close, isOpen: () => !!current, escapeHtml };
+  // Used by pages that show the estimator outside the dialog (services).
+  function mountEstimator(container, briefing) {
+    if (!container) return;
+    container.innerHTML = estimatorMarkup();
+    wireEstimator(briefing || null, container);
+  }
+
+  window.MABModule = { open, close, isOpen: () => !!current, escapeHtml, mountEstimator };
 })();

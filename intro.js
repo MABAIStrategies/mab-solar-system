@@ -13,8 +13,15 @@
 
   const root = document.getElementById("intro");
   if (!root) return;
+  // Flat mode has no intro: the page is readable immediately.
+  if (document.documentElement.classList.contains("flat")) return;
 
   const video = document.getElementById("intro-video");
+  // The 9.6 MB bumper is fetched only when the 3D journey actually runs.
+  if (video && video.dataset.src && !video.getAttribute("src")) {
+    video.preload = "auto";
+    video.src = video.dataset.src;
+  }
   const logo = root.querySelector(".intro-logo");
   const lines = [...root.querySelectorAll(".intro-line")];
   const bar = root.querySelector(".intro-bar > i");

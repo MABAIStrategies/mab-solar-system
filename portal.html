@@ -3,230 +3,81 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Client Portal — MAB AI Strategies</title>
+<title>Client billing | MAB AI Strategies</title>
+<meta name="description" content="Billing for MAB AI Strategies clients: invoices, receipts and payment methods through Stripe.">
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#05070c">
+<link rel="icon" type="image/png" sizes="32x32" href="/assets/icon-32.png">
+<link rel="icon" type="image/png" sizes="192x192" href="/assets/icon-192.png">
+<link rel="apple-touch-icon" href="/assets/icon-180.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="shared.css">
-<style>
-  /* MATRIX / ops station — circuit green, terminal density */
-  body { --cyan: #34d399; --violet: #059669; --magenta: #6ee7b7; --lime: #a7f3d0; }
-  .page-bg {
-    background:
-      radial-gradient(ellipse 60% 40% at 80% 20%, rgba(16,185,129,0.18), transparent 50%),
-      radial-gradient(ellipse 50% 45% at 10% 80%, rgba(6,78,59,0.4), transparent 50%),
-      linear-gradient(180deg, #020a07 0%, #041f16 50%, #010604 100%) !important;
-  }
-  .page-bg::before {
-    content: "";
-    position: fixed; inset: 0; z-index: 0; pointer-events: none; opacity: 0.12;
-    background-image:
-      linear-gradient(rgba(52,211,153,0.15) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(52,211,153,0.12) 1px, transparent 1px);
-    background-size: 48px 48px;
-    mask-image: radial-gradient(ellipse 70% 60% at 50% 40%, #000 20%, transparent 75%);
-  }
-  .auth, .dash, .inv, .sheet {
-    background: linear-gradient(165deg, rgba(6,78,59,0.35), rgba(2,10,7,0.9)) !important;
-    border-color: rgba(52,211,153,0.22) !important;
-    font-variant-numeric: tabular-nums;
-  }
-  .bar i { background: linear-gradient(90deg,#34d399,#6ee7b7) !important; }
-  .paid { color: #6ee7b7 !important; }
-  .hero { max-width: 640px; margin-bottom: 28px; }
-  .hero h1 { font-size: clamp(2rem,4.5vw,3rem); margin: 10px 0 12px; }
-  .hero p { color: var(--dim); font-weight: 300; }
-  .auth, .dash {
-    max-width: 920px;
-    border-radius: 22px; padding: clamp(22px,3vw,32px);
-    background: linear-gradient(160deg,rgba(255,255,255,.05),rgba(255,255,255,.015));
-    border: 1px solid var(--line);
-  }
-  .auth form { display: grid; gap: 12px; max-width: 360px; margin-top: 16px; }
-  label { display: grid; gap: 6px; font-size: 13px; color: var(--dim); }
-  input {
-    background: rgba(0,0,0,.28); border: 1px solid var(--line);
-    border-radius: 12px; padding: 12px 14px; outline: none;
-  }
-  input:focus { border-color: rgba(0,229,255,.45); }
-  .hint { font-size: 12px; color: var(--faint); margin-top: 8px; }
-  .hint code { color: var(--lime); font-family: var(--font-m); }
-  .dash-head {
-    display: flex; flex-wrap: wrap; gap: 14px;
-    justify-content: space-between; align-items: flex-start; margin-bottom: 22px;
-  }
-  .grid { display: grid; grid-template-columns: 1.1fr .9fr; gap: 18px; }
-  @media (max-width: 800px) { .grid { grid-template-columns: 1fr; } }
-  h3 { font-family: var(--font-d); font-size: 1.1rem; margin-bottom: 12px; }
-  .p-row {
-    padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,.06);
-  }
-  .p-meta { display: flex; justify-content: space-between; gap: 10px; font-size: .92rem; }
-  .p-meta span { font-family: var(--font-m); font-size: 11px; color: var(--faint); text-transform: uppercase; }
-  .bar { height: 6px; background: rgba(255,255,255,.06); border-radius: 99px; overflow: hidden; margin-top: 8px; }
-  .bar i { display: block; height: 100%; background: linear-gradient(90deg,var(--cyan),var(--violet)); }
-  .status-done .bar i { background: var(--lime); }
-  .status-locked { opacity: .5; }
-  .inv {
-    display: flex; justify-content: space-between; gap: 12px; align-items: center;
-    padding: 12px; border-radius: 12px; border: 1px solid var(--line);
-    background: rgba(0,0,0,.2); margin-bottom: 10px;
-  }
-  .inv strong { display: block; font-size: .92rem; }
-  .inv span { font-size: 12px; color: var(--faint); }
-  .inv-right { display: flex; align-items: center; gap: 10px; }
-  .paid { color: var(--lime); font-size: 12px; font-family: var(--font-m); }
-  .modal {
-    position: fixed; inset: 0; background: rgba(0,0,0,.7);
-    display: grid; place-items: center; z-index: 100; padding: 16px;
-  }
-  .modal.hidden { display: none; }
-  .sheet {
-    width: min(400px,100%); border-radius: 18px; padding: 22px;
-    background: #0c101c; border: 1px solid var(--line);
-  }
-  .sheet h3 { margin: 8px 0; }
-  .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-  .linkish { background: none; border: 0; color: var(--dim); cursor: pointer; margin-top: 10px; }
-</style>
+<link rel="stylesheet" href="/shared.css">
 </head>
 <body>
 <div class="page-bg"></div>
-<header class="site-nav">
-  <div class="nav-pill">
-    <a class="brand" href="index.html"><span class="brand-orb"></span>MAB<em>·AI</em></a>
-    <a href="index.html">Journey</a>
-    <a href="services.html">Services</a>
-    <a href="command.html">Command</a>
-    <a class="on" href="portal.html">Portal</a>
-    <a class="nav-cta" href="https://calendar.app.google/kuwKF2VrDuyvdfN9A" target="_blank" rel="noopener">Briefing</a>
-  </div>
+<a class="skip-link" href="#main">Skip to content</a>
+<!-- nav:start -->
+<header class="site-nav" id="site-nav">
+  <nav class="nav-pill" aria-label="Main">
+    <a class="brand" href="/" aria-label="MAB AI Strategies home"><img src="/assets/mab-logo-256.png" alt="" width="30" height="30"><span>MAB <em>AI Strategies</em></span></a>
+    <a href="/">Journey</a>
+    <a href="/services">Services</a>
+    <a href="/command">Systems</a>
+    <a href="/about">About</a>
+    <a class="on" aria-current="page" href="/portal">Client billing</a>
+    <a class="nav-cta show-m" href="https://calendar.app.google/kuwKF2VrDuyvdfN9A" target="_blank" rel="noopener">Briefing</a>
+  </nav>
 </header>
-<main class="page">
+<!-- nav:end -->
+<main class="page" id="main" tabindex="-1">
   <div class="page-inner">
-    <header class="hero">
-      <p class="kicker"><span class="dot"></span>CLIENT PORTAL</p>
-      <h1>Phases, artifacts, <span class="grad">invoices.</span></h1>
-      <p>Active clients track delivery and pay via Stripe. Demo auth only in this prototype.</p>
+    <header class="prose">
+      <p class="kicker"><span class="dot"></span>Client billing</p>
+      <h1>Invoices, receipts and <span class="grad">payment methods.</span></h1>
+      <p>Billing runs on Stripe. Sign in with the email on your account and Stripe sends you a one-time sign-in code.</p>
     </header>
-    <div id="root"></div>
+    <p class="notice" id="paid-notice" hidden>Payment received. Thank you. Stripe has emailed your receipt, and Mark will be in touch within one business day to schedule kickoff.</p>
+    <div class="billing-card">
+      <div id="billing-action"></div>
+      <a class="btn" data-track="booking_clicked" href="https://calendar.app.google/kuwKF2VrDuyvdfN9A" target="_blank" rel="noopener">Book time with Mark</a>
+    </div>
+    <p class="muted billing-help">Question about an invoice? Email <a href="mailto:mark@mabaistrategies.com">mark@mabaistrategies.com</a> with the invoice number. The <a href="/refunds">Refund &amp; Return Policy</a> explains cancellations.</p>
   </div>
 </main>
-<div class="modal hidden" id="modal"></div>
-<div class="mab-toast" id="toast"></div>
-<script src="content.js"></script>
-<script>
-(function(){
-  const M=window.MAB;
-  const root=document.getElementById("root");
-  const modal=document.getElementById("modal");
-  function money(n){ return "$"+n.toLocaleString(); }
-  function toast(m){
-    const t=document.getElementById("toast");
-    t.textContent=m; t.classList.add("show");
-    setTimeout(()=>t.classList.remove("show"),2800);
-  }
-  function authed(){ return localStorage.getItem("mab_portal_auth")==="1"; }
-
-  function render(){
-    if(!authed()){
-      root.innerHTML=`
-        <div class="auth">
-          <p class="kicker"><span class="dot"></span>SECURE SIGN-IN</p>
-          <h2 style="font-family:var(--font-d);font-size:1.4rem;margin-bottom:6px">Client workspace</h2>
-          <p class="muted">Provisioned at engagement kickoff.</p>
-          <form id="login">
-            <label>Email<input type="email" required value="client@acme.demo"></label>
-            <label>Password<input type="password" required value="demo"></label>
-            <button class="btn primary-solid" type="submit">Sign in</button>
-            <p class="hint">Demo password: <code>demo</code></p>
-          </form>
-        </div>`;
-      root.querySelector("#login").onsubmit=(e)=>{
-        e.preventDefault();
-        const pw=e.target.querySelector('input[type="password"]').value;
-        if(pw!=="demo"){ alert("Use password: demo"); return; }
-        localStorage.setItem("mab_portal_auth","1");
-        // also unlock vault for convenience in demo
-        localStorage.setItem("mab_vault_auth","1");
-        toast("Signed in · vault unlocked");
-        render();
-      };
-      return;
-    }
-    const d=M.portalDemo;
-    root.innerHTML=`
-      <div class="dash">
-        <div class="dash-head">
-          <div>
-            <p class="kicker"><span class="dot"></span>SIGNED IN · DEMO</p>
-            <h2 style="font-family:var(--font-d);font-size:1.5rem">${d.client}</h2>
-            <p class="muted">${d.project}</p>
-          </div>
-          <div style="display:flex;gap:8px;flex-wrap:wrap">
-            <a class="btn" href="command.html">Open Command</a>
-            <button class="btn ghost" type="button" id="out">Sign out</button>
-          </div>
-        </div>
-        <div class="grid">
-          <section>
-            <h3>Delivery phases</h3>
-            ${d.phases.map(p=>`
-              <div class="p-row status-${p.status}">
-                <div class="p-meta"><strong>${p.name}</strong><span>${p.status}</span></div>
-                <div class="bar"><i style="width:${p.pct}%"></i></div>
-              </div>`).join("")}
-          </section>
-          <section>
-            <h3>Invoices</h3>
-            ${d.invoices.map(inv=>`
-              <div class="inv">
-                <div><strong>${inv.id}</strong><span>${inv.label} · due ${inv.due}</span></div>
-                <div class="inv-right">
-                  <em style="font-style:normal;font-family:var(--font-d)">${money(inv.amount)}</em>
-                  ${inv.status==="paid"
-                    ? `<span class="paid">Paid</span>`
-                    : `<button class="btn" type="button" data-pay="${inv.id}" data-amt="${inv.amount}">Pay</button>`}
-                </div>
-              </div>`).join("")}
-            <p class="hint">Stripe test UI — wire Payment Element / Checkout in production.</p>
-          </section>
-        </div>
-      </div>`;
-    root.querySelector("#out").onclick=()=>{
-      localStorage.removeItem("mab_portal_auth");
-      render();
-    };
-    root.querySelectorAll("[data-pay]").forEach(btn=>{
-      btn.onclick=()=>openStripe(btn.dataset.pay, +btn.dataset.amt);
-    });
-  }
-
-  function openStripe(id, amt){
-    modal.classList.remove("hidden");
-    modal.innerHTML=`
-      <div class="sheet">
-        <div style="font-weight:700">Stripe <span style="color:#fbbf24;font-size:10px;font-family:var(--font-m);margin-left:8px">TEST MODE</span></div>
-        <h3>Pay ${money(amt)}</h3>
-        <p class="muted" style="margin-bottom:12px">${id} · MAB AI Strategies LLC</p>
-        <label style="display:grid;gap:6px;font-size:13px;color:var(--dim);margin-bottom:8px">Card<input value="4242 4242 4242 4242" readonly></label>
-        <div class="row2">
-          <label style="display:grid;gap:6px;font-size:13px;color:var(--dim)">Expiry<input value="12 / 28" readonly></label>
-          <label style="display:grid;gap:6px;font-size:13px;color:var(--dim)">CVC<input value="123" readonly></label>
-        </div>
-        <button class="btn primary-solid" style="width:100%;margin-top:14px" id="pay">Pay ${money(amt)}</button>
-        <button class="linkish" type="button" id="cancel">Cancel</button>
-      </div>`;
-    modal.querySelector("#cancel").onclick=()=>modal.classList.add("hidden");
-    modal.querySelector("#pay").onclick=()=>{
-      const inv=M.portalDemo.invoices.find(x=>x.id===id);
-      if(inv) inv.status="paid";
-      modal.innerHTML=`<div class="sheet"><h3>Payment successful</h3><p class="muted">${id} marked paid.</p><button class="btn" id="done" style="margin-top:12px">Back</button></div>`;
-      modal.querySelector("#done").onclick=()=>{ modal.classList.add("hidden"); render(); };
-      toast("Invoice paid (demo)");
-    };
-  }
-  modal.addEventListener("click",e=>{ if(e.target===modal) modal.classList.add("hidden"); });
-  render();
-})();
-</script>
+<!-- footer:start -->
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <img src="/assets/mab-logo-256.png" alt="" width="44" height="44" loading="lazy">
+      <p><strong>MAB AI Strategies LLC</strong><br>Converting chaos into consistency, and consistency into currency.</p>
+    </div>
+    <nav aria-label="Site">
+      <a href="/">Journey</a>
+      <a href="/services">Services</a>
+      <a href="/command">Systems</a>
+      <a href="/about">About</a>
+      <a href="/contact">Contact</a>
+      <a href="/portal">Client billing</a>
+    </nav>
+    <nav aria-label="Connect">
+      <a href="mailto:mark@mabaistrategies.com">mark@mabaistrategies.com</a>
+      <a href="https://calendar.app.google/kuwKF2VrDuyvdfN9A" target="_blank" rel="noopener">Book a briefing</a>
+      <a href="https://www.linkedin.com/in/mark-bockrath-a5a1b2196/" target="_blank" rel="noopener">LinkedIn</a>
+      <a href="https://x.com/mab_ai_CEO" target="_blank" rel="noopener">X</a>
+    </nav>
+    <nav aria-label="Legal">
+      <a href="/privacy">Privacy Policy</a>
+      <a href="/terms">Terms of Service</a>
+      <a href="/refunds">Refund &amp; Return Policy</a>
+    </nav>
+  </div>
+  <p class="footer-legal">© 2026 MAB AI Strategies LLC</p>
+</footer>
+<!-- footer:end -->
+<script src="/content.js"></script>
+<script src="/pages.js"></script>
+<script src="/site.js"></script>
 </body>
 </html>

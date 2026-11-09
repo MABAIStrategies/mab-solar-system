@@ -357,3 +357,10 @@ body.module-open .world-rift { opacity: .15; }
   #world-journey *, #world-journey *::before, #world-journey *::after,
   .mab-module *, .mab-module *::before { animation: none !important; transition-duration: .01ms !important; }
 }
+
+/* With the offer panel open on wide screens, the date steps back so the panel never covers it. */
+.caption-date { transition: font-size .35s ease; }
+@media (min-width: 900px) {
+  body.module-open .caption-date { font-size: clamp(44px, 6.6vw, 100px); }
+  body.module-open .world-caption, body.module-open .caption-text { max-width: calc(100vw - 660px); }
+}
