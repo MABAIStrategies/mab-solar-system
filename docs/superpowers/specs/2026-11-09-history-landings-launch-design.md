@@ -2,7 +2,7 @@
 
 Date: 2026-11-09
 Repo: `MABAIStrategies/mab-solar-system` · Branch: `feat/history-landings-launch`
-Status: awaiting Mark's review. No product code has been changed.
+Status: approved by Mark on 2026-11-09, with the amendments in section 13.
 
 ## 1. Outcome
 
@@ -210,3 +210,28 @@ public URLs); clickjacking (`frame-ancestors`).
 | One current price sheet, and which items sell online | Stripe objects, prices on `/services` | Tiers show "Book a call", no prices |
 | Web3Forms access key | Contact form | Form falls back to `mailto:` |
 | OK to port the three policy pages as written | `/privacy`, `/terms`, `/refunds` | Ported verbatim from the live site |
+
+## 13. Amendments from Mark's approval (2026-11-09)
+
+These override anything above that conflicts.
+
+- Pricing: keep the live site's prices. Retainers: Foundation $2,500 / month,
+  Accelerator $5,500 / month, Principal custom. Standalone: AI Readiness Audit $2,000,
+  Single Workflow or Agent $3,500+, Keynote / Workshop / Board custom. A6 no longer
+  applies.
+- Guarantee: remove all guaranteed-refund wording: "90-day ROI guarantee or refund",
+  the FAQ line promising "a full refund for that month", and "you'll see results or you
+  won't be billed". "Billed monthly, cancel anytime after 90 days" stays.
+- No Export button on this site or any public site. A7 is withdrawn.
+- Legal pages: port `privacy-policy.html`, `terms-of-service.html` and
+  `refund-policy.html` from the live site. Wording stays as written. If the refund
+  policy restates the removed guarantee, flag it to Mark and do not rewrite it.
+- Contact: no new form and no Web3Forms. `/contact` carries the live contact page's
+  content (email, calendar, LinkedIn, X).
+- Logo: use the 1254 px M lockup Mark attached, replacing `assets/mab-logo.png`.
+- About page: use the headshot Mark attached.
+- Copy voice: follow `true-voice.md` (direct, plain, diagnosis before pitch; none of its
+  suppressed phrases). Its facts do not override section 7.
+- Planets in the space scene keep their current look. Only the landing changes.
+- Vercel: the solar project lives in team `mab-ai-strategies`
+  (`team_XlZBYCzdrozj6IWMW6NrYFkF`).
