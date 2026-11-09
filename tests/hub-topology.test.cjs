@@ -22,7 +22,7 @@ assert.match(space, /id:\s*"origin"[\s\S]{0,180}z:\s*-[0-9](?:\.\d+)?[\s\S]{0,10
 assert.match(space, /new THREE\.ShaderMaterial\([\s\S]{0,900}glowColor/, 'planets retain a Fresnel atmosphere shader');
 assert.match(space, /getCloudTexture\(\)/, 'living worlds retain independent cloud shells');
 
-for (const script of ['station-hold.js', 'world-data.js', 'world-orbit.js', 'world-journey.js']) {
+for (const script of ['station-hold.js', 'world-data.js', 'world-journey.js']) {
   assert.ok(index.includes(`"${script}"`), `${script} is loaded by the page`);
 }
 

@@ -1,38 +1,43 @@
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
-const { WORLD_DEFS } = require('../world-data.js');
+const { WORLD_DEFS, dateFor } = require('../world-data.js');
 
 const root = path.resolve(__dirname, '..');
-const jsPath = path.join(root, 'world-journey.js');
-const cssPath = path.join(root, 'worlds.css');
-assert.ok(fs.existsSync(jsPath), 'world journey controller exists');
-assert.ok(fs.existsSync(cssPath), 'world journey stylesheet exists');
+const read = (f) => fs.readFileSync(path.join(root, f), 'utf8');
+const js = read('world-journey.js');
+const popup = read('module-popup.js');
+const css = read('worlds.css');
+const index = read('index.html');
 
-const js = fs.readFileSync(jsPath, 'utf8');
-const css = fs.readFileSync(cssPath, 'utf8');
-const index = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
-
-assert.match(js, /worldForStation\(/, 'world opens from a hub station id');
-assert.match(js, /orbitAt\(/, 'world scroll drives the tested circular path');
-assert.match(js, /mab:world-open/, 'world notifies the hub when it takes over');
-assert.match(js, /mab:world-close/, 'rift return restores the hub');
-assert.match(js, /exitRift\s*>\s*0\.9/, 'completed orbit arms the outbound rift');
-assert.match(js, /scrollTo\(\{\s*top:\s*0/, 'each world begins at its entry rift');
-assert.ok(index.includes('href="worlds.css"'), 'world stylesheet is loaded');
+assert.match(js, /worldForStation\(/, 'landing opens from a hub station id');
+assert.match(js, /mab:world-open/, 'landing notifies the hub when it takes over');
+assert.match(js, /mab:world-close/, 'closing restores the hub');
+assert.match(js, /createTimedStationHold\(\{\s*durationMs:\s*HOLD_MS/, 'module opens after the station hold');
+assert.match(js, /const HOLD_MS = 2000;/, 'hold is two seconds');
+assert.match(js, /briefing\.visit\(stationId\)/, 'each landing is recorded in the brief');
+for (const gone of ['chapters', 'detailImage', 'renderNarrative', 'orbitAt', 'world-fx']) {
+  assert.ok(!js.includes(gone), `journey no longer uses ${gone}`);
+  assert.ok(!css.includes(gone), `stylesheet no longer styles ${gone}`);
+}
+assert.match(popup, /role="dialog" aria-modal="true" aria-labelledby="module-title"/);
+assert.match(popup, /Illustration from your inputs, not a promised saving\./);
+assert.ok(index.includes('href="worlds.css"'), 'landing stylesheet is loaded');
+for (const script of ['roi.js', 'briefing.js', 'wireframes.js', 'module-popup.js', 'world-journey.js', 'assets/vendor/three.min.js']) {
+  assert.ok(index.includes(`"${script}"`), `${script} is loaded`);
+}
+assert.ok(index.indexOf('"module-popup.js"') < index.indexOf('"world-journey.js"'), 'module loads before the journey');
+assert.ok(!/cdn\.jsdelivr|unpkg\.com/.test(index), 'no CDN scripts');
 
 for (const world of WORLD_DEFS) {
-  for (const asset of [world.image, world.detailImage]) {
-    const file = path.join(root, ...asset.split('/'));
-    assert.ok(fs.existsSync(file), `${asset} exists locally`);
-    assert.ok(fs.statSync(file).size > 50_000, `${asset} contains a real image, not a placeholder`);
-  }
-  assert.ok(css.includes(`[data-theme="${world.theme}"]`), `${world.theme} has a specific atmosphere treatment`);
+  const file = path.join(root, 'assets', 'worlds', `${world.theme}.webp`);
+  assert.ok(fs.existsSync(file) && fs.statSync(file).size > 50_000, `${world.theme} approach image exists`);
 }
-
-assert.match(css, /\.world-rift/, 'rift has a visible rendered treatment');
-assert.match(css, /\.world-fx\.meteors/, 'lava world contains meteor motion');
-assert.match(css, /\.world-fx\.droplets/, 'ocean and jungle can show close surface droplets');
-assert.match(css, /\.world-fx\.agent-network/, 'singularity contains an agent-network layer');
-
+// The live stop reports the visitor's local calendar day.
+const live = WORLD_DEFS.find((w) => w.live);
+assert.deepEqual(dateFor(live, new Date(2026, 10, 9, 23, 59)), { iso: '2026-11-09', label: 'Nov 9, 2026' });
+assert.deepEqual(dateFor(live, new Date(2027, 0, 1, 0, 0)), { iso: '2027-01-01', label: 'Jan 1, 2027' });
+assert.deepEqual(dateFor(WORLD_DEFS[0]), { iso: '2012-09-30', label: 'Sep 30, 2012' });
+assert.ok(dateFor(live, new Date('nope')).iso.length === 10, 'bad clock input falls back to now');
+assert.deepEqual(dateFor(null), { iso: '', label: '' });
 console.log('world-journey.test.cjs: PASS');

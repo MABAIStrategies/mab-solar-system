@@ -1019,6 +1019,12 @@
   setTimeout(bakeNextMap, 40);
 
   function frame(now) {
+    // A landing covers the whole viewport: skip drawing the scene behind it.
+    if (document.body.classList.contains("world-open")) {
+      last = now;
+      requestAnimationFrame(frame);
+      return;
+    }
     const dt = Math.min(0.05, (now - last) / 1000);
     last = now;
     elapsed += dt;

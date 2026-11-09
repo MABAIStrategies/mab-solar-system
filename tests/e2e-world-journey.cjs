@@ -1,221 +1,103 @@
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
-const { chromium } = require('playwright-core');
-const { WORLD_DEFS } = require('../world-data.js');
+const { launch, watch, BASE_URL } = require('./browser.cjs');
+const { WORLD_DEFS, dateFor } = require('../world-data.js');
 
-const root = path.resolve(__dirname, '..');
-const qaDir = path.join(root, 'qa');
+const qaDir = path.join(__dirname, '..', 'qa', 'screenshots');
 fs.mkdirSync(qaDir, { recursive: true });
 
-const executablePath = 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe';
+const OFFER_NAMES = {
+  audit: 'AI Readiness Audit', agents: 'Custom AI Agents', architecture: 'Fractional AI Architecture',
+  sales: 'AI Sales Systems', web: 'Conversion Web Experiences', automation: 'Workflow Automation', briefing: 'Strategic Briefing',
+};
 
 (async () => {
-  const browser = await chromium.launch({
-    headless: true,
-    executablePath,
-    args: ['--disable-gpu-sandbox', '--disable-dev-shm-usage'],
-  });
-  const context = await browser.newContext({ viewport: { width: 1600, height: 1000 }, deviceScaleFactor: 1 });
-  const page = await context.newPage();
-  const pageErrors = [];
-  const failedLocalRequests = [];
-  page.on('pageerror', (error) => pageErrors.push(String(error)));
-  page.on('console', (message) => {
-    if (message.type() === 'error') pageErrors.push(`console: ${message.text()}`);
-  });
-  page.on('requestfailed', (request) => {
-    if (request.url().startsWith('http://127.0.0.1:8765')) {
-      failedLocalRequests.push(`${request.url()} :: ${request.failure()?.errorText}`);
-    }
-  });
-
+  const browser = await launch();
+  const page = await (await browser.newContext({ viewport: { width: 1600, height: 1000 } })).newPage();
+  const problems = watch(page);
   try {
-    await page.goto('http://127.0.0.1:8765/index.html', { waitUntil: 'domcontentloaded', timeout: 120_000 });
+    await page.goto(`${BASE_URL}/index.html`, { waitUntil: 'domcontentloaded', timeout: 120_000 });
     await page.keyboard.press('Escape');
     await page.waitForFunction(
-      () => window.MABHub && window.MABWorldJourney && window.MABSpace && !document.body.classList.contains('intro-active'),
-      null,
-      { timeout: 120_000 }
-    );
-    await page.waitForTimeout(1_000);
-    await page.screenshot({ path: path.join(qaDir, '01-hub-opening.png') });
-
-    const firstPlanet = await page.evaluate(() => {
-      const canvas = document.querySelector('#space-canvas');
-      return {
-        canvasVisible: !!canvas && getComputedStyle(canvas).display !== 'none',
-        startProgress: window.MABSpace.getProgress(),
-        bodyTheme: document.body.dataset.theme || '',
-      };
-    });
-    assert.equal(firstPlanet.canvasVisible, true, 'WebGL hub canvas is visible');
-    assert.ok(firstPlanet.startProgress < 0.03, 'hub opens at the start of the journey');
-
-    await page.evaluate(() => window.MABHub.jumpToId('mechanism'));
-    const reachedMechanism = await page
-      .waitForFunction(() => window.MABHub.getActiveId() === 'mechanism', null, { timeout: 20_000 })
-      .catch(() => null);
-    if (!reachedMechanism) {
-      const debugState = await page.evaluate(() => ({
-        y: scrollY,
-        active: window.MABHub.getActiveId(),
-        progress: window.MABSpace.getProgress(),
-        hasLenis: !!window.__lenis,
-        introActive: document.body.classList.contains('intro-active'),
-        target: (() => {
-          const el = document.querySelector('.runway-stop[data-id="mechanism"]');
-          return el ? { top: el.offsetTop, height: el.offsetHeight } : null;
-        })(),
-      }));
-      throw new Error(`Mechanism did not activate: ${JSON.stringify(debugState)}`);
-    }
-    await page.waitForSelector('#station-dwell.holding', { state: 'visible', timeout: 20_000 });
-    await page.screenshot({ path: path.join(qaDir, '02-lava-station.png') });
-
-    const beforeLockedWheel = await page.evaluate(() => ({ y: scrollY, remaining: window.MABHub.stationHoldRemaining() }));
-    assert.ok(beforeLockedWheel.remaining > 500, 'arrival exposes a real timed hold window');
-    await page.mouse.move(800, 500);
-    await page.mouse.wheel(0, 1_800);
-    await page.waitForTimeout(280);
-    const duringLockedWheel = await page.evaluate(() => ({ y: scrollY, remaining: window.MABHub.stationHoldRemaining() }));
-    assert.ok(
-      Math.abs(duringLockedWheel.y - beforeLockedWheel.y) < 4,
-      `scroll is discarded during timed hold (${beforeLockedWheel.y} -> ${duringLockedWheel.y})`
-    );
-
-    await page.waitForFunction(() => window.MABHub.stationHoldRemaining() === 0, null, { timeout: 5_000 });
-    const releasedY = await page.evaluate(() => scrollY);
-    await page.mouse.wheel(0, 900);
-    await page.waitForTimeout(650);
-    const afterReleasedWheel = await page.evaluate(() => scrollY);
-    assert.ok(afterReleasedWheel > releasedY + 15, 'normal wheel movement resumes after two seconds');
-
-    await page.evaluate(() => window.MABHub.jumpToId('mechanism'));
-    await page.waitForFunction(() => window.MABHub.getActiveId() === 'mechanism', null, { timeout: 20_000 });
-    const stationSurface = await page.evaluate(() => getComputedStyle(document.querySelector('#surface-layer')).backgroundImage);
-    assert.match(stationSurface, /assets\/worlds\/lava\.webp/, 'hub station uses the real local lava image');
-
-    const enter = page.locator('.stop-panel[data-id="mechanism"] .world-enter');
-    await enter.waitFor({ state: 'visible', timeout: 10_000 });
-    await enter.click();
-    await page.waitForFunction(() => document.body.classList.contains('world-open'));
-    await page.waitForFunction(() => document.querySelector('#world-journey')?.dataset.theme === 'lava');
-    await page.waitForTimeout(500);
-    await page.screenshot({ path: path.join(qaDir, '03-lava-world-entry.png') });
-
-    await page.evaluate(() => {
-      const el = document.querySelector('#world-journey');
-      el.scrollTo({ top: (el.scrollHeight - el.clientHeight) * 0.5, behavior: 'auto' });
-    });
-    await page.waitForTimeout(500);
-    const midpoint = await page.evaluate(() => {
-      const el = document.querySelector('#world-journey');
-      const visibleCards = [...el.querySelectorAll('.world-beat.active .world-beat-card')]
-        .filter((card) => {
-          const style = getComputedStyle(card);
-          const rect = card.getBoundingClientRect();
-          return style.visibility !== 'hidden' && Number(style.opacity) > 0.9 && rect.width > 0 && rect.height > 0;
-        });
-      const card = visibleCards[0] || null;
-      const rect = card?.getBoundingClientRect();
-      return {
-        detail: parseFloat(el.style.getPropertyValue('--detail-alpha')),
-        orbitX: parseFloat(el.style.getPropertyValue('--orbit-x')),
-        progress: parseFloat(el.style.getPropertyValue('--world-progress')),
-        meteors: getComputedStyle(el.querySelector('.world-fx.meteors')).display,
-        viewportHeight: innerHeight,
-        chapter: {
-          count: visibleCards.length,
-          title: card?.querySelector('h2')?.textContent?.trim() || '',
-          top: rect?.top ?? -1,
-          bottom: rect?.bottom ?? -1,
-        },
-      };
-    });
-    assert.ok(midpoint.progress > 0.47 && midpoint.progress < 0.53, 'world scroll reaches the midpoint of its orbit');
-    assert.ok(midpoint.detail > 0.85, 'detail scene is revealed during the orbit');
-    assert.equal(midpoint.meteors, 'block', 'lava-specific meteors are rendered');
-    assert.equal(midpoint.chapter.count, 1, 'exactly one active world chapter is visible at midpoint');
-    assert.ok(midpoint.chapter.title.length > 3, 'the active world chapter contains readable copy');
-    assert.ok(
-      midpoint.chapter.top >= 0 && midpoint.chapter.bottom <= midpoint.viewportHeight,
-      `active chapter remains fully inside the viewport (${midpoint.chapter.top}..${midpoint.chapter.bottom})`
-    );
-    await page.screenshot({ path: path.join(qaDir, '04-lava-world-midpoint.png') });
-
-    await page.evaluate(() => {
-      const el = document.querySelector('#world-journey');
-      el.scrollTo({ top: el.scrollHeight - el.clientHeight - 18, behavior: 'auto' });
-    });
-    await page.waitForTimeout(300);
-    const nearExit = await page.evaluate(() => ({
-      power: parseFloat(document.querySelector('.world-rift--exit').style.getPropertyValue('--rift-power')),
-      worldOpen: document.body.classList.contains('world-open'),
-    }));
-    assert.ok(nearExit.power > 0.9, 'opposite-side outbound rift becomes dominant at orbit completion');
-    assert.equal(nearExit.worldOpen, true, 'near-exit view remains visible before crossing');
-    await page.screenshot({ path: path.join(qaDir, '05-lava-outbound-rift.png') });
-
-    await page.evaluate(() => {
-      const el = document.querySelector('#world-journey');
-      el.scrollTo({ top: el.scrollHeight, behavior: 'auto' });
-    });
-    await page.waitForFunction(() => !document.body.classList.contains('world-open'), null, { timeout: 5_000 });
-    await page.waitForTimeout(250);
-    assert.equal(await page.evaluate(() => window.MABHub.getActiveId()), 'mechanism', 'rift returns to the originating hub station');
-    await page.screenshot({ path: path.join(qaDir, '06-returned-to-hub.png') });
+      () => window.MABHub && window.MABWorldJourney && window.MABModule && window.MABSpace && !document.body.classList.contains('intro-active'),
+      null, { timeout: 120_000 });
+    assert.equal(await page.evaluate(() => getComputedStyle(document.querySelector('#space-canvas')).display !== 'none'), true, 'space scene still renders');
 
     for (const world of WORLD_DEFS) {
-      await page.evaluate((stationId) => window.MABWorldJourney.open(stationId), world.stationId);
-      await page.waitForFunction((theme) => document.querySelector('#world-journey')?.dataset.theme === theme, world.theme);
-      await page.evaluate(() => {
-        const el = document.querySelector('#world-journey');
-        el.scrollTo({ top: (el.scrollHeight - el.clientHeight) * 0.43, behavior: 'auto' });
-      });
-      await page.waitForTimeout(220);
-      const visual = await page.evaluate((expectedTheme) => {
-        const el = document.querySelector('#world-journey');
-        return {
-          theme: el.dataset.theme,
-          main: getComputedStyle(el.querySelector('.world-image-main')).backgroundImage,
-          detail: getComputedStyle(el.querySelector('.world-image-detail')).backgroundImage,
-        };
-      }, world.theme);
-      assert.equal(visual.theme, world.theme);
-      assert.ok(visual.main.includes(`${world.theme}.webp`), `${world.theme} uses its local hero image`);
-      assert.ok(visual.detail.includes(`${world.theme}-detail.webp`), `${world.theme} uses its local detail image`);
-      await page.screenshot({ path: path.join(qaDir, `world-${world.theme}.png`) });
-      await page.evaluate(() => window.MABWorldJourney.close('qa'));
-      await page.waitForFunction(() => !document.body.classList.contains('world-open'), null, { timeout: 4_000 });
+      const id = world.stationId;
+      assert.equal(await page.evaluate((s) => window.MABWorldJourney.open(s), id), true, `${id} opens`);
+      await page.waitForSelector('#world-journey.active', { timeout: 5_000 });
+      const shown = await page.evaluate(() => ({
+        datetime: document.querySelector('.caption-date').getAttribute('datetime'),
+        date: document.querySelector('.caption-date').textContent,
+        caption: document.querySelector('.caption-text').textContent,
+      }));
+      const expected = world.live ? await page.evaluate(() => {
+        const d = new Date(); const p = (n) => String(n).padStart(2, '0');
+        return `${d.getFullYear()}-${p(d.getMonth() + 1)}-${p(d.getDate())}`;
+      }) : world.dateISO;
+      assert.equal(shown.datetime, expected, `${id} date`);
+      if (!world.live) assert.equal(shown.date, dateFor(world).label);
+      assert.equal(shown.caption, world.caption, `${id} caption`);
+
+      // Module opens by itself after the two-second hold.
+      const t0 = Date.now();
+      await page.waitForSelector('.mab-module.open [role="dialog"]', { timeout: 4_000 });
+      assert.ok(Date.now() - t0 >= 1_200, `${id} module waits for the hold`);
+      const title = await page.textContent('#module-title');
+      assert.equal(title, OFFER_NAMES[world.offerId], `${id} maps to its offer`);
+      assert.equal(await page.locator('.module-specs li').count(), 3);
+      await page.waitForTimeout(500);
+      await page.screenshot({ path: path.join(qaDir, `landing-${world.order}-${id}.png`) });
+
+      if (id === 'origin') {
+        const before = await page.textContent('[data-est="dollars"]');
+        assert.equal(before, '$72,000 a year');
+        await page.evaluate(() => {
+          const el = document.querySelector('.mab-estimator input[name="teamSize"]');
+          el.value = '40'; el.dispatchEvent(new Event('input', { bubbles: true }));
+        });
+        const after = await page.textContent('.mab-estimator');
+        assert.match(after, /\$288,000 a year/);
+        assert.ok(!/NaN|Infinity|undefined/.test(after), 'estimator output is clean');
+        assert.match(after, /Illustration from your inputs, not a promised saving\./);
+      }
+      if (id === 'mechanism') {
+        await page.click('[data-add-brief]');
+        await page.waitForSelector('.mab-module', { state: 'hidden' });
+      } else {
+        // Focus is trapped in the dialog; Esc closes only the module.
+        for (let i = 0; i < 12; i++) await page.keyboard.press('Tab');
+        assert.equal(await page.evaluate(() => !!document.activeElement.closest('.mab-module-card')), true, `${id} focus stays in dialog`);
+        await page.keyboard.press('Escape');
+        await page.waitForSelector('.mab-module', { state: 'hidden' });
+      }
+      assert.equal(await page.evaluate(() => window.MABWorldJourney.isOpen()), true, `${id} landing stays open after module closes`);
+      if (id !== 'mechanism') {
+        assert.equal(await page.evaluate(() => document.activeElement.matches('[data-world-module]')), true, `${id} focus returns to opener`);
+      }
+      if (id === 'convergence') {
+        await page.click('[data-world-module]');
+        await page.waitForSelector('.mab-module.open');
+        const brief = await page.textContent('.brief-text');
+        assert.match(brief, /Custom AI Agents/, 'brief lists the added offer');
+        assert.match(brief, /Sep 30, 2012 · AlexNet/, 'brief lists visited stops');
+        assert.match(brief, /40 people/, 'brief carries the estimate');
+        const mail = await page.getAttribute('a[href^="mailto:"]', 'href');
+        assert.ok(mail.startsWith('mailto:mark@mabaistrategies.com?subject='));
+        assert.equal(await page.getAttribute('.mab-brief a.primary-solid', 'href'), 'https://calendar.app.google/kuwKF2VrDuyvdfN9A');
+        await page.screenshot({ path: path.join(qaDir, 'brief.png') });
+        await page.keyboard.press('Escape');
+      } else {
+        assert.equal(await page.isVisible('[data-world-next]'), true, `${id} offers the next stop`);
+      }
+      await page.keyboard.press('Escape');
+      await page.waitForFunction(() => !window.MABWorldJourney.isOpen() && !document.body.classList.contains('world-open'), null, { timeout: 5_000 });
     }
-
-    assert.deepEqual(failedLocalRequests, [], `no local resources failed: ${failedLocalRequests.join('\n')}`);
-    assert.deepEqual(pageErrors, [], `browser emitted no errors: ${pageErrors.join('\n')}`);
-
-    const report = {
-      status: 'PASS',
-      firstPlanet,
-      hold: {
-        remainingAtCaptureMs: Math.round(beforeLockedWheel.remaining),
-        beforeY: Math.round(beforeLockedWheel.y),
-        duringY: Math.round(duringLockedWheel.y),
-        releasedY: Math.round(releasedY),
-        afterReleasedY: Math.round(afterReleasedWheel),
-      },
-      orbit: midpoint,
-      outboundRiftPower: nearExit.power,
-      themesCaptured: WORLD_DEFS.map((world) => world.theme),
-      screenshots: fs.readdirSync(qaDir).filter((file) => file.endsWith('.png')).sort(),
-      errors: pageErrors,
-      failedLocalRequests,
-    };
-    fs.writeFileSync(path.join(qaDir, 'e2e-report.json'), JSON.stringify(report, null, 2));
-    console.log(JSON.stringify(report, null, 2));
+    assert.deepEqual(problems, [], 'no page errors or failed requests');
+    console.log('e2e-world-journey.cjs: PASS');
   } finally {
     await browser.close();
   }
-})().catch((error) => {
-  console.error(error.stack || error);
-  process.exitCode = 1;
-});
+})().catch((error) => { console.error(error); process.exit(1); });
