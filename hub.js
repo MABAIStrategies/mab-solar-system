@@ -52,29 +52,24 @@
   const panels = {};
   function buildPanelHTML(stop) {
     let extra = "";
-    if (stop.id === "mechanism") {
-      extra = `<div class="phase-row">${M.phases
-        .map(
-          (p) =>
-            `<div class="phase-chip"><b>0${p.id} · ${p.tag}</b><span>${p.title}</span></div>`
-        )
-        .join("")}</div>`;
+    const stopWorld = window.MABWorldData?.worldForStation(stop.id);
+    const stopOffer = stopWorld && (M.offers || []).find((o) => o.id === stopWorld.offerId);
+    if (stopOffer) {
+      extra = `<div class="phase-row"><div class="phase-chip"><b>WHAT IT MEANS FOR YOU</b><span>${stopOffer.name}</span></div></div>`;
     }
-    if (stop.id === "proof") {
-      extra = `<div class="stat-row">${M.stats
-        .map(
-          (s) =>
-            `<div class="stat-chip"><strong>${s.prefix || ""}${s.n}${s.suffix || ""}</strong><em>${s.label}</em></div>`
-        )
-        .join("")}</div>
-        <blockquote class="quote-box">“${M.quote.text}”<cite>— ${M.quote.by}</cite></blockquote>`;
+    if (stop.id === "proof" && M.proof) {
+      const chips = (label, list) =>
+        list
+          .map((text) => `<div class="stat-chip"><strong>${text}</strong><em>${label}</em></div>`)
+          .join("");
+      extra += `<div class="stat-row">${chips("Founder's career record", M.proof.career)}${chips("Built at MAB", M.proof.built)}</div>`;
     }
 
     const actions = [];
     const world = window.MABWorldData?.worldForStation(stop.id);
     if (world) {
       actions.push(
-        `<button class="btn world-enter" type="button" data-world-station="${stop.id}"><span>Enter ${world.title}</span><small>Begin circular world scroll</small></button>`
+        `<button class="btn world-enter" type="button" data-world-station="${stop.id}"><span>Land at ${world.title}</span><small>See the moment and what it means for you</small></button>`
       );
     }
     if (stop.primaryCal || stop.id === "convergence") {
@@ -86,9 +81,6 @@
       actions.push(
         `<a class="btn" href="${stop.route}">${stop.routeLabel || "Enter"}</a>`
       );
-    }
-    if (stop.id === "convergence") {
-      actions.push(`<a class="btn ghost" href="portal.html">Client Portal</a>`);
     }
 
     const titleHtml = stop.title

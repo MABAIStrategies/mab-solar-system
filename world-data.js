@@ -5,125 +5,106 @@
 })(typeof window !== "undefined" ? window : globalThis, function () {
   "use strict";
 
+  // Seven landings: six dated moments in recent AI history, then today.
+  // `theme` still drives the planet's look in the space scene; only the landing changed.
   const WORLD_DEFS = [
     {
       stationId: "origin",
       theme: "arctic",
-      eyebrow: "WORLD 01 · THE MEMORY OF SCALE",
-      title: "Ice Age",
-      subtitle: "Ancient scale. Modern precision.",
-      image: "assets/worlds/arctic.webp",
-      detailImage: "assets/worlds/arctic-detail.webp",
+      order: 1,
+      title: "AlexNet",
+      dateISO: "2012-09-30",
+      dateLabel: "Sep 30, 2012",
+      caption:
+        "AlexNet is entered in the ImageNet challenge and beats the runner-up by more than ten points: machines learn to see.",
+      sourceUrl: "https://image-net.org/challenges/LSVRC/2012/",
+      offerId: "audit",
+      wireframe: "scan",
       palette: { ink: "#effbff", accent: "#8fe8ff", glow: "#d9f7ff", shadow: "#06121e" },
-      atmosphere: "Snow crystals, blue ice and megafauna move around a system built to survive pressure.",
-      chapters: [
-        { tag: "THRESHOLD", title: "Enter at glacial scale", body: "The journey begins close enough to see frost move across the terrain—not from a distant telescope." },
-        { tag: "FIELD SIGNAL", title: "Massive systems leave tracks", body: "Woolly mammoths and sabertooth hunters make scale legible. In business, operating drag leaves tracks too." },
-        { tag: "MAB PRINCIPLE", title: "Find the load-bearing constraint", body: "We begin with the bottleneck that keeps recurring, then design the smallest autonomous system that removes it." },
-        { tag: "RETURN VECTOR", title: "Complete the orbit", body: "The rift is ahead. Follow it back to the hub from the far side of the planet." },
-      ],
     },
     {
       stationId: "mechanism",
       theme: "lava",
-      eyebrow: "WORLD 02 · PRESSURE INTO PROPULSION",
-      title: "The Forge",
-      subtitle: "Four phases. One compounding machine.",
-      image: "assets/worlds/lava.webp",
-      detailImage: "assets/worlds/lava-detail.webp",
+      order: 2,
+      title: "Move 37",
+      dateISO: "2016-03-10",
+      dateLabel: "Mar 10, 2016",
+      caption:
+        "In game two against Lee Sedol, AlphaGo plays Move 37, a move no human would have chosen.",
+      sourceUrl: "https://www.blog.google/technology/ai/alphagos-ultimate-challenge/",
+      offerId: "agents",
+      wireframe: "lattice",
       palette: { ink: "#fff6ea", accent: "#ff7a18", glow: "#ffd089", shadow: "#170703" },
-      atmosphere: "Molten rivers, fractured obsidian and meteor trails turn pressure into visible motion.",
-      chapters: [
-        { tag: "DIAGNOSE", title: "Read the pressure", body: "Trace revenue friction, repetitive work and handoff failure until the real constraint is visible." },
-        { tag: "ARCHITECT", title: "Cut channels for flow", body: "Agents, data and approvals get a durable operating path before anything is automated." },
-        { tag: "AUTOMATE · AMPLIFY", title: "Let the machine compound", body: "Ship, measure, reinforce. The system improves because the feedback loop is part of the build." },
-        { tag: "RETURN VECTOR", title: "Cross the cooling rim", body: "The outbound rift is forming beyond the meteor field." },
-      ],
     },
     {
       stationId: "services",
       theme: "ocean",
-      eyebrow: "WORLD 03 · DEPTH OF CAPABILITY",
-      title: "Pelagic Systems",
-      subtitle: "A living stack for the agentic enterprise.",
-      image: "assets/worlds/ocean.webp",
-      detailImage: "assets/worlds/ocean-detail.webp",
+      order: 3,
+      title: "The Transformer",
+      dateISO: "2017-06-12",
+      dateLabel: "Jun 12, 2017",
+      caption:
+        "“Attention Is All You Need” introduces the Transformer, the architecture everything since is built on.",
+      sourceUrl: "https://arxiv.org/abs/1706.03762",
+      offerId: "architecture",
+      wireframe: "transformer",
       palette: { ink: "#edffff", accent: "#36e6ff", glow: "#8cf7e5", shadow: "#03121c" },
-      atmosphere: "Schools of fish, rays, reefs and wet volcanic rock create a world that never feels static.",
-      chapters: [
-        { tag: "SHALLOW WATER", title: "See the system moving", body: "Autonomous agents, workflow automation, sales systems, audits and architecture operate as one ecology." },
-        { tag: "THE REEF", title: "Specialists coordinate", body: "Each capability has a narrow role. Orchestration makes the whole environment intelligent." },
-        { tag: "THE DEEP", title: "Infrastructure below the spectacle", body: "Guardrails, data contracts and measurable outcomes keep production systems alive under pressure." },
-        { tag: "RETURN VECTOR", title: "Ride the current home", body: "The current bends into a luminous rift on the far side of the reef." },
-      ],
     },
     {
       stationId: "proof",
       theme: "desert",
-      eyebrow: "WORLD 04 · SIGNAL BEFORE SCALE",
-      title: "The First Signal",
-      subtitle: "Small organisms. Measurable impact.",
-      image: "assets/worlds/desert.webp",
-      detailImage: "assets/worlds/desert-detail.webp",
+      order: 4,
+      title: "Cicero",
+      dateISO: "2022-11-22",
+      dateLabel: "Nov 22, 2022",
+      caption:
+        "Meta's Cicero reaches human-level play in Diplomacy by negotiating in plain language.",
+      sourceUrl: "https://doi.org/10.1126/science.ade9097",
+      offerId: "sales",
+      wireframe: "funnel",
       palette: { ink: "#fff7e8", accent: "#ffbf58", glow: "#ff6f91", shadow: "#190b06" },
-      atmosphere: "An arid macro-landscape collapses into a living microscopic world hidden inside mineral pools.",
-      chapters: [
-        { tag: "MACRO", title: "The landscape looks empty", body: "Operational waste often hides in plain sight—spread thin across hundreds of repeated decisions." },
-        { tag: "MICRO", title: "Life appears under magnification", body: "The smallest recurring event can be the highest-leverage automation target." },
-        { tag: "EVIDENCE", title: "$12M+ impact. 250+ deployments.", body: "Fifteen hours returned per week and payback measured in production—not a mirage, a record." },
-        { tag: "RETURN VECTOR", title: "Follow the organism ring", body: "The microscopic current resolves into a rift back to deep space." },
-      ],
     },
     {
       stationId: "command",
       theme: "jungle",
-      eyebrow: "WORLD 05 · LIVING SYSTEMS",
-      title: "Prehistoric Canopy",
-      subtitle: "Agents that adapt, hunt and compound.",
-      image: "assets/worlds/jungle.webp",
-      detailImage: "assets/worlds/jungle-detail.webp",
+      order: 5,
+      title: "ChatGPT",
+      dateISO: "2022-11-30",
+      dateLabel: "Nov 30, 2022",
+      caption:
+        "ChatGPT launches as a free research preview and the interface makes the model matter.",
+      sourceUrl: "https://openai.com/index/chatgpt/",
+      offerId: "web",
+      wireframe: "browser",
       palette: { ink: "#f0ffe8", accent: "#9dff63", glow: "#44ffc1", shadow: "#04130a" },
-      atmosphere: "Wet leaves, mist, giant ferns and dinosaurs make every layer feel inhabited and close.",
-      chapters: [
-        { tag: "UNDERSTORY", title: "Every leaf carries signal", body: "The smallest skills and utilities become reusable building blocks instead of forgotten experiments." },
-        { tag: "PREDATOR PATH", title: "Agents act with purpose", body: "Each system senses, decides and executes inside explicit boundaries." },
-        { tag: "THE CANOPY", title: "Command keeps growing", body: "Clients unlock a living gallery of agents, skills, workflows and applications that compound over time." },
-        { tag: "RETURN VECTOR", title: "The canopy tears open", body: "Circle the habitat and approach the rift from behind the ancient trees." },
-      ],
     },
     {
       stationId: "enterprise",
       theme: "city",
-      eyebrow: "WORLD 06 · HUMAN THROUGHPUT",
-      title: "The Operating City",
-      subtitle: "Automation that gives human attention back.",
-      image: "assets/worlds/city.webp",
-      detailImage: "assets/worlds/city-detail.webp",
+      order: 6,
+      title: "Model Context Protocol",
+      dateISO: "2024-11-25",
+      dateLabel: "Nov 25, 2024",
+      caption:
+        "Anthropic open-sources the Model Context Protocol and agents plug into the tools where work lives.",
+      sourceUrl: "https://www.anthropic.com/news/model-context-protocol",
+      offerId: "automation",
+      wireframe: "hub",
       palette: { ink: "#f4f8ff", accent: "#67d5ff", glow: "#ff5ca8", shadow: "#070817" },
-      atmosphere: "Crowds, rain, autonomous transit and glass towers show technology inside the human operating system.",
-      chapters: [
-        { tag: "STREET LEVEL", title: "Work is a moving network", body: "Sales, service, operations and leadership already exchange signals every minute." },
-        { tag: "COORDINATION", title: "Remove the traffic between teams", body: "Agents handle retrieval, routing and follow-through while people keep judgment and relationships." },
-        { tag: "CAPACITY", title: "Give the city time back", body: "Recovered attention becomes faster delivery, stronger pipeline and room for higher-value decisions." },
-        { tag: "RETURN VECTOR", title: "Take the outbound lane", body: "The city grid curves into a rift above the opposite platform." },
-      ],
     },
     {
       stationId: "convergence",
       theme: "singularity",
-      eyebrow: "WORLD 07 · THE AGENTSPHERE",
-      title: "Convergence",
-      subtitle: "Every autonomous system, one field.",
-      image: "assets/worlds/singularity.webp",
-      detailImage: "assets/worlds/singularity-detail.webp",
+      order: 7,
+      title: "Today",
+      dateISO: null,
+      dateLabel: null,
+      live: true,
+      caption: "The next entry on this timeline is yours.",
+      sourceUrl: null,
+      offerId: "briefing",
+      wireframe: "brief",
       palette: { ink: "#fffaf0", accent: "#ffe278", glow: "#8cf7ff", shadow: "#020207" },
-      atmosphere: "An accretion disk bends around a black core while thousands of agents exchange live signals.",
-      chapters: [
-        { tag: "ORBIT", title: "Specialized agents enter the field", body: "Research, sales, operations and delivery remain distinct—but they share context and intent." },
-        { tag: "AGENTSPHERE", title: "Coordination becomes the advantage", body: "The system routes work to the right intelligence, tool and human at the right moment." },
-        { tag: "EVENT HORIZON", title: "Decision has a cost", body: "A strategic briefing maps the highest-ROI automations and prices the cost of waiting." },
-        { tag: "RETURN VECTOR", title: "Slingshot back to the hub", body: "Complete the final arc and let the singularity throw you back into space." },
-      ],
     },
   ];
 
@@ -133,5 +114,19 @@
     return BY_STATION[stationId] || null;
   }
 
-  return { WORLD_DEFS, worldForStation };
+  const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
+  // Date shown on a landing. The live stop uses the visitor's local calendar day.
+  function dateFor(world, now) {
+    if (!world) return { iso: "", label: "" };
+    if (!world.live) return { iso: world.dateISO, label: world.dateLabel };
+    const d = now instanceof Date && !isNaN(now) ? now : new Date();
+    const pad = (n) => String(n).padStart(2, "0");
+    return {
+      iso: `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`,
+      label: `${MONTHS[d.getMonth()]} ${d.getDate()}, ${d.getFullYear()}`,
+    };
+  }
+
+  return { WORLD_DEFS, worldForStation, dateFor };
 });

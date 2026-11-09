@@ -6,7 +6,7 @@
   "scripts": {
     "serve": "python -m http.server 8765",
     "test": "npm run test:unit && npm run test:syntax",
-    "test:unit": "node tests/station-hold.test.cjs && node tests/world-data.test.cjs && node tests/world-orbit.test.cjs && node tests/hub-topology.test.cjs && node tests/world-journey.test.cjs",
+    "test:unit": "node tests/station-hold.test.cjs && node tests/world-data.test.cjs && node tests/content.test.cjs && node tests/world-orbit.test.cjs && node tests/hub-topology.test.cjs && node tests/world-journey.test.cjs",
     "test:syntax": "node --check hub.js && node --check space-scene.js && node --check world-journey.js && node --check world-data.js && node --check world-orbit.js && node --check station-hold.js && node --check content.js",
     "test:e2e": "node tests/e2e-world-journey.cjs",
     "test:responsive": "node tests/e2e-responsive.cjs",
