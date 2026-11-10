@@ -763,6 +763,19 @@
     .aperture-stage { max-height: none; width: min(860px, 92vw); height: auto; opacity: 1 !important; }
     .void-svg { opacity: 0.85 !important; }
   }
+  #journey-end {
+    position: fixed; left: 50%; top: 50%; z-index: 60;
+    width: min(560px, calc(100vw - 36px)); padding: 30px;
+    border: 1px solid var(--line); border-radius: 22px;
+    background: rgba(8, 10, 16, 0.78); backdrop-filter: blur(14px);
+    transform: translate(-50%, -46%); opacity: 0; visibility: hidden;
+    transition: opacity .45s ease, transform .45s ease, visibility 0s linear .45s;
+  }
+  #journey-end.show { opacity: 1; visibility: visible; transform: translate(-50%, -50%); transition-delay: 0s; }
+  #journey-end h2 { font-family: var(--font-d); font-size: clamp(1.7rem, 4vw, 2.4rem); line-height: 1.05; margin: 6px 0 10px; }
+  #journey-end p { color: var(--dim); }
+  #journey-end .actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 20px; }
+  html.flat #journey-end, body.world-open #journey-end { display: none; }
 </style>
 </head>
 <body class="journey-page">
@@ -1015,6 +1028,17 @@
 </div>
 
 <p class="cursor-hint">A crewed probe may cross your path. Intercept it for a field tip.</p>
+
+<aside id="journey-end" aria-label="End of the timeline">
+  <p class="kicker"><span class="dot"></span>End of the timeline</p>
+  <h2>The next entry is yours.</h2>
+  <p>Bring one workflow to a 30-minute briefing. You leave with a roadmap either way.</p>
+  <div class="actions">
+    <a class="btn primary-solid" data-track="booking_clicked" href="https://calendar.app.google/kuwKF2VrDuyvdfN9A" target="_blank" rel="noopener">Book the briefing</a>
+    <a class="btn" href="/services">Services and pricing</a>
+    <button class="btn ghost" type="button">Back to the start</button>
+  </div>
+</aside>
 
 <div id="anomaly-reward" role="dialog" aria-modal="true" aria-labelledby="reward-title">
   <div class="reward">

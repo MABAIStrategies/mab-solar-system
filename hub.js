@@ -19,6 +19,15 @@
   const edgeInner = document.getElementById("edgeInner");
   const coldHud = document.getElementById("cold-hud");
   const siteNav = document.getElementById("site-nav");
+  const journeyEnd = document.getElementById("journey-end");
+  if (journeyEnd) {
+    journeyEnd.inert = true;
+    const back = journeyEnd.querySelector("button");
+    if (back) back.addEventListener("click", () => {
+      if (window.__lenis) window.__lenis.scrollTo(0, { duration: 1.6 });
+      else window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+  }
   const rail = document.getElementById("journey-rail");
   const toast = document.getElementById("toast");
   const reward = document.getElementById("anomaly-reward");
@@ -57,14 +66,6 @@
     if (stopOffer) {
       extra = `<div class="phase-row"><div class="phase-chip"><b>WHAT IT MEANS FOR YOU</b><span>${stopOffer.name}</span></div></div>`;
     }
-    if (stop.id === "proof" && M.proof) {
-      const chips = (label, list) =>
-        list
-          .map((text) => `<div class="stat-chip"><strong>${text}</strong><em>${label}</em></div>`)
-          .join("");
-      extra += `<div class="stat-row">${chips("Founder's career record", M.proof.career)}${chips("Built at MAB", M.proof.built)}</div>`;
-    }
-
     const actions = [];
     const world = window.MABWorldData?.worldForStation(stop.id);
     if (world) {
@@ -251,6 +252,13 @@
     const blur = ease > 0.5 ? 0 : (1 - ease) * 6;
 
     setHole(w, h, op, blur);
+
+    // End of the runway: offer a next step instead of empty space.
+    if (journeyEnd) {
+      const atEnd = progress >= 0.985 && !document.body.classList.contains("world-open");
+      journeyEnd.classList.toggle("show", atEnd);
+      journeyEnd.inert = !atEnd;
+    }
 
     if (best && bestOpen > 0.18 && contentById[best] && best !== "exit") {
       setActivePanel(best);
