@@ -1,6 +1,6 @@
 /**
  * Seven landings on the AI-history timeline.
- * A station click descends to one dated event: the date and a one-sentence caption,
+ * A station click descends to one dated event: the date, the story in plain language and why it matters,
  * then (after the station hold) the offer module that event introduces.
  * Closing the landing returns the visitor to the same place in the space hub.
  */
@@ -12,7 +12,7 @@
 
   const { WORLD_DEFS, worldForStation, dateFor } = dataApi;
   const reduceMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
-  const HOLD_MS = 2000;
+  const HOLD_MS = 9000; // long enough to read the story before the offer slides in
   const escapeHtml =
     (window.MABModule && window.MABModule.escapeHtml) ||
     ((v) => String(v == null ? "" : v).replace(/[&<>"']/g, (c) => `&#${c.charCodeAt(0)};`));
@@ -56,7 +56,12 @@
     <div class="world-caption">
       <p class="caption-kicker"></p>
       <time class="caption-date"></time>
+      <h2 class="caption-headline"></h2>
       <p class="caption-text"></p>
+      <div class="caption-bridge">
+        <p class="bridge-label">Why it matters to your business</p>
+        <p class="bridge-text"></p>
+      </div>
       <div class="caption-actions">
         <button class="btn primary-solid caption-open" type="button" data-world-module>
           <i class="hold-ring" aria-hidden="true"></i><span></span>
@@ -72,6 +77,9 @@
   const kicker = root.querySelector(".caption-kicker");
   const dateEl = root.querySelector(".caption-date");
   const captionEl = root.querySelector(".caption-text");
+  const headlineEl = root.querySelector(".caption-headline");
+  const bridgeEl = root.querySelector(".bridge-text");
+  const bridgeLabel = root.querySelector(".bridge-label");
   const openButton = root.querySelector("[data-world-module]");
   const openLabel = openButton.querySelector("span");
   const nextButton = root.querySelector("[data-world-next]");
@@ -142,7 +150,7 @@
         openLabel.textContent = `Reopen: ${offer.name}`;
         const next = nextWorld(world);
         nextButton.hidden = !next;
-        if (next) nextButton.textContent = `Next stop: ${next.title} →`;
+        if (next) nextButton.textContent = `Next stop: ${next.headline} →`;
       },
     });
     track("module_trigger", { stop: world.stationId, trigger });
@@ -182,14 +190,17 @@
     root.style.setProperty("--world-accent", world.palette.accent);
     root.style.setProperty("--world-glow", world.palette.glow);
     root.style.setProperty("--world-shadow", world.palette.shadow);
-    surface.style.backgroundImage = `url("assets/worlds/${world.theme}.webp")`;
+    surface.style.backgroundImage = `url("assets/events/${world.stationId}.webp")`;
 
     locationLabel.textContent = `AI HISTORY · ${dates.iso.slice(0, 4)}`;
     kicker.textContent = `STOP ${String(world.order).padStart(2, "0")} OF ${String(WORLD_DEFS.length).padStart(2, "0")} · ${world.title.toUpperCase()}`;
     dateEl.dateTime = dates.iso;
     dateEl.textContent = dates.label;
-    captionEl.textContent = world.caption;
-    openLabel.textContent = offer ? `What this means for you: ${offer.name}` : "Continue";
+    headlineEl.textContent = world.headline;
+    captionEl.textContent = world.story;
+    bridgeEl.textContent = world.bridge;
+    openLabel.textContent = offer ? `Show me: ${offer.name}` : "Continue";
+    bridgeLabel.textContent = world.live ? "Your next step" : "Why it matters to your business";
     nextButton.hidden = true;
     sourceLink.hidden = !world.sourceUrl;
     if (world.sourceUrl) sourceLink.href = world.sourceUrl;

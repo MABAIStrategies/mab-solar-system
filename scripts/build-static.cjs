@@ -109,7 +109,9 @@ function timeline() {
     return `    <article class="tl-stop" id="stop-${w.stationId}" data-station="${w.stationId}" style="--tl-accent:${w.palette.accent}">
       <p class="tl-kicker">Stop ${String(w.order).padStart(2, "0")} · ${esc(w.title)}</p>
       <h2>${time}</h2>
-      <p class="tl-caption">${esc(w.caption)}${source}</p>
+      <h3 class="tl-headline">${esc(w.headline)}</h3>
+      <p class="tl-caption">${esc(w.story)}${source}</p>
+      <p class="tl-bridge"><strong>Why it matters to your business.</strong> ${esc(w.bridge)}</p>
       <div class="tl-offer">
         <h3>${esc(o.name)}</h3>
         <p>${esc(o.blurb)}</p>

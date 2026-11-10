@@ -22,13 +22,13 @@ html, body { scroll-snap-type: none !important; }
     linear-gradient(90deg, rgba(1,4,10,.82) 0%, rgba(1,4,10,.22) 48%, rgba(1,4,10,.65) 100%),
     linear-gradient(0deg, rgba(1,4,10,.68), transparent 48%);
 }
-#surface-layer[data-theme="arctic"] { background-image: url("assets/worlds/arctic.webp"); filter: saturate(.74) contrast(1.08) hue-rotate(168deg); }
-#surface-layer[data-theme="lava"] { background-image: url("assets/worlds/lava.webp"); }
-#surface-layer[data-theme="ocean"] { background-image: url("assets/worlds/ocean.webp"); }
-#surface-layer[data-theme="desert"] { background-image: url("assets/worlds/desert.webp"); }
-#surface-layer[data-theme="jungle"] { background-image: url("assets/worlds/jungle.webp"); }
-#surface-layer[data-theme="city"] { background-image: url("assets/worlds/city.webp"); }
-#surface-layer[data-theme="singularity"] { background-image: url("assets/worlds/singularity.webp"); }
+#surface-layer[data-theme="arctic"] { background-image: url("assets/events/origin.webp"); }
+#surface-layer[data-theme="lava"] { background-image: url("assets/events/mechanism.webp"); }
+#surface-layer[data-theme="ocean"] { background-image: url("assets/events/services.webp"); }
+#surface-layer[data-theme="desert"] { background-image: url("assets/events/proof.webp"); }
+#surface-layer[data-theme="jungle"] { background-image: url("assets/events/command.webp"); }
+#surface-layer[data-theme="city"] { background-image: url("assets/events/enterprise.webp"); }
+#surface-layer[data-theme="singularity"] { background-image: url("assets/events/convergence.webp"); }
 
 .aperture-pane {
   background: linear-gradient(120deg, rgba(2,7,15,.68), rgba(2,7,15,.35)) !important;
@@ -151,9 +151,9 @@ body.world-open #station-dwell {
 .world-backdrop, .world-surface, .world-grid, .world-vignette { position: absolute; inset: 0; }
 .world-surface {
   background-size: cover;
-  background-position: center;
-  opacity: .62;
-  filter: saturate(.85) brightness(.72) blur(1px);
+  background-position: 70% center;
+  opacity: .92;
+  filter: saturate(.95) brightness(.86);
   transform: scale(1.12);
   transition: transform 2.4s cubic-bezier(.16,1,.3,1);
 }
@@ -167,7 +167,7 @@ body.world-open #station-dwell {
   background-size: 64px 64px;
   transform: perspective(520px) rotateX(64deg) scale(2.4);
   transform-origin: 50% 0;
-  opacity: .6;
+  opacity: .12;
   mask-image: linear-gradient(transparent, #000 30%, transparent 96%);
   -webkit-mask-image: linear-gradient(transparent, #000 30%, transparent 96%);
   animation: grid-drift 9s linear infinite;
@@ -175,8 +175,8 @@ body.world-open #station-dwell {
 @keyframes grid-drift { to { background-position: 0 64px, 0 0; } }
 .world-vignette {
   background:
-    radial-gradient(ellipse at 28% 46%, transparent 0, color-mix(in srgb, var(--world-shadow) 72%, transparent) 62%),
-    linear-gradient(90deg, color-mix(in srgb, var(--world-shadow) 86%, transparent), transparent 70%);
+    linear-gradient(90deg, color-mix(in srgb, var(--world-shadow) 94%, transparent) 0, color-mix(in srgb, var(--world-shadow) 80%, transparent) 36%, transparent 72%),
+    linear-gradient(0deg, color-mix(in srgb, var(--world-shadow) 70%, transparent), transparent 30%);
 }
 
 .world-chrome {
@@ -225,18 +225,42 @@ body.world-open #station-dwell {
 .caption-kicker::before { content: ""; width: 28px; height: 1px; background: var(--world-accent); }
 .caption-date {
   display: block;
-  margin: 18px 0 14px;
-  font: 600 clamp(52px, 10.5vw, 150px)/.92 var(--font-d, "Space Grotesk", system-ui, sans-serif);
-  letter-spacing: -.03em;
+  margin: 16px 0 6px;
+  font: 600 clamp(15px, 1.5vw, 20px)/1 ui-monospace, monospace;
+  letter-spacing: .16em; text-transform: uppercase;
+  color: var(--world-glow);
+}
+.caption-headline {
+  margin: 0 0 18px;
+  max-width: 16ch;
+  font: 600 clamp(34px, 5.2vw, 76px)/.98 var(--font-d, "Space Grotesk", system-ui, sans-serif);
+  letter-spacing: -.025em;
   color: var(--world-ink);
-  text-shadow: 0 0 60px color-mix(in srgb, var(--world-accent) 38%, transparent);
+  text-shadow: 0 0 60px color-mix(in srgb, var(--world-accent) 32%, transparent);
 }
 .caption-text {
-  max-width: 34ch;
-  font: 400 clamp(18px, 2.2vw, 30px)/1.3 var(--font-b, Inter, system-ui, sans-serif);
-  color: color-mix(in srgb, var(--world-ink) 88%, transparent);
+  max-width: 60ch;
+  font: 400 clamp(15px, 1.25vw, 18px)/1.6 var(--font-b, Inter, system-ui, sans-serif);
+  color: color-mix(in srgb, var(--world-ink) 90%, transparent);
 }
-.caption-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 16px; margin-top: 30px; }
+.caption-bridge {
+  max-width: 60ch;
+  margin-top: 20px; padding: 14px 18px;
+  border-left: 2px solid var(--world-accent);
+  background: color-mix(in srgb, var(--world-shadow) 62%, transparent);
+  border-radius: 0 10px 10px 0;
+}
+.bridge-label {
+  margin: 0 0 6px;
+  font: 600 10px/1 ui-monospace, monospace; letter-spacing: .18em; text-transform: uppercase;
+  color: var(--world-accent);
+}
+.bridge-text {
+  margin: 0;
+  font: 500 clamp(15px, 1.25vw, 18px)/1.5 var(--font-b, Inter, system-ui, sans-serif);
+  color: var(--world-ink);
+}
+.caption-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 16px; margin-top: 22px; }
 .caption-open { position: relative; display: inline-flex; align-items: center; gap: 10px; }
 .hold-ring {
   width: 14px; height: 14px; border-radius: 50%; flex: none;
@@ -259,7 +283,7 @@ body.world-open #station-dwell {
   width: min(72vh, 60vw); aspect-ratio: 1;
   transform: translate(-50%, -50%);
   pointer-events: none;
-  opacity: .5;
+  display: none; /* the event photo is the subject now */
 }
 .rift-ring { position: absolute; inset: 3%; border-radius: 50%; border: 2px solid color-mix(in srgb, var(--world-accent) 55%, transparent); box-shadow: 0 0 40px color-mix(in srgb, var(--world-accent) 30%, transparent); animation: rift-breathe 2.8s ease-in-out infinite alternate; }
 .rift-ring:nth-child(2) { inset: 22%; border-width: 1px; animation-delay: -.8s; animation-duration: 3.6s; }
@@ -281,9 +305,9 @@ body.module-open .world-rift { opacity: .15; }
 .mab-module-card {
   position: relative;
   width: min(520px, 100vw);
-  height: 100%;
+  height: 100vh; height: 100dvh; max-height: 100dvh;
   display: grid;
-  grid-template-rows: minmax(190px, 34vh) 1fr;
+  grid-template-rows: clamp(150px, 30vh, 300px) minmax(0, 1fr); /* body row may shrink, so it scrolls */
   background: color-mix(in srgb, var(--world-shadow) 90%, #0b1220);
   border-left: 1px solid color-mix(in srgb, var(--world-accent) 40%, transparent);
   box-shadow: -30px 0 80px rgba(0,0,0,.55);
@@ -314,7 +338,7 @@ body.module-open .world-rift { opacity: .15; }
   border: 1px solid var(--world-accent); border-radius: 6px; opacity: .6;
   box-shadow: 14px 14px 0 -1px color-mix(in srgb, var(--world-shadow) 90%, #0b1220), 14px 14px 0 0 color-mix(in srgb, var(--world-accent) 60%, transparent);
 }
-.mab-module-body { overflow-y: auto; padding: 26px clamp(20px, 4vw, 34px) 34px; overscroll-behavior: contain; }
+.mab-module-body { min-height: 0; overflow-y: auto; -webkit-overflow-scrolling: touch; padding: 26px clamp(20px, 4vw, 34px) 34px; overscroll-behavior: contain; }
 .module-kicker { font: 600 10px/1.4 ui-monospace, monospace; letter-spacing: .16em; color: var(--world-accent); text-transform: uppercase; }
 .mab-module-body h2 { margin: 10px 0 12px; font: 600 clamp(28px, 4vw, 38px)/1.05 var(--font-d, "Space Grotesk", system-ui, sans-serif); letter-spacing: -.01em; }
 .module-blurb { font-size: 16px; line-height: 1.55; color: color-mix(in srgb, var(--world-ink) 84%, transparent); }
@@ -350,7 +374,7 @@ body.module-open .world-rift { opacity: .15; }
   .world-caption { margin-left: 18px; width: calc(100vw - 36px); }
   .caption-actions .btn { width: 100%; justify-content: center; }
   .world-rift { left: 82%; opacity: .3; }
-  .mab-module-card { grid-template-rows: minmax(150px, 26vh) 1fr; border-left: 0; }
+  .mab-module-card { grid-template-rows: minmax(150px, 26vh) minmax(0, 1fr); border-left: 0; }
   #station-dwell { bottom: 14px; }
 }
 
@@ -359,9 +383,20 @@ body.module-open .world-rift { opacity: .15; }
   .mab-module *, .mab-module *::before { animation: none !important; transition-duration: .01ms !important; }
 }
 
-/* With the offer panel open on wide screens, the date steps back so the panel never covers it. */
-.caption-date { transition: font-size .35s ease; }
+/* With the offer panel open on wide screens, the story narrows and the photo slides left so
+   the panel does not sit on top of its subject. */
+.world-surface { transition: transform 2.4s cubic-bezier(.16,1,.3,1), background-position .6s ease; }
 @media (min-width: 900px) {
-  body.module-open .caption-date { font-size: clamp(44px, 6.6vw, 100px); }
-  body.module-open .world-caption, body.module-open .caption-text { max-width: calc(100vw - 660px); }
+  body.module-open .world-caption { max-width: calc(100vw - 600px); }
+  body.module-open .world-surface { background-position: 100% center; transform: translateX(-22vw) scale(1.02); }
+}
+@media (max-height: 760px) {
+  .caption-headline { font-size: clamp(30px, 4vw, 52px); margin-bottom: 12px; }
+  .caption-text, .bridge-text { font-size: 15px; line-height: 1.5; }
+  .caption-bridge { margin-top: 14px; padding: 10px 14px; }
+  .caption-actions { margin-top: 16px; }
+}
+@media (max-width: 760px) {
+  .world-surface { background-position: 78% center; opacity: .5; }
+  #world-journey { overflow-y: auto; }
 }

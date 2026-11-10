@@ -14,7 +14,7 @@ assert.match(js, /worldForStation\(/, 'landing opens from a hub station id');
 assert.match(js, /mab:world-open/, 'landing notifies the hub when it takes over');
 assert.match(js, /mab:world-close/, 'closing restores the hub');
 assert.match(js, /createTimedStationHold\(\{\s*durationMs:\s*HOLD_MS/, 'module opens after the station hold');
-assert.match(js, /const HOLD_MS = 2000;/, 'hold is two seconds');
+assert.match(js, /const HOLD_MS = 9000;/, 'hold leaves time to read the story');
 assert.match(js, /briefing\.visit\(stationId\)/, 'each landing is recorded in the brief');
 for (const gone of ['chapters', 'detailImage', 'renderNarrative', 'orbitAt', 'world-fx']) {
   assert.ok(!js.includes(gone), `journey no longer uses ${gone}`);
@@ -30,8 +30,9 @@ assert.ok(index.indexOf('"module-popup.js"') < index.indexOf('"world-journey.js"
 assert.ok(!/cdn\.jsdelivr|unpkg\.com/.test(index), 'no CDN scripts');
 
 for (const world of WORLD_DEFS) {
-  const file = path.join(root, 'assets', 'worlds', `${world.theme}.webp`);
-  assert.ok(fs.existsSync(file) && fs.statSync(file).size > 50_000, `${world.theme} approach image exists`);
+  const file = path.join(root, 'assets', 'events', `${world.stationId}.webp`);
+  assert.ok(fs.existsSync(file) && fs.statSync(file).size > 30_000, `${world.stationId} event image exists`);
+  assert.ok(!fs.existsSync(path.join(root, 'assets', 'worlds', `${world.theme}.webp`)), `${world.theme} themed backdrop is gone`);
 }
 // The live stop reports the visitor's local calendar day.
 const live = WORLD_DEFS.find((w) => w.live);

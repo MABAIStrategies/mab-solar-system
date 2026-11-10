@@ -14,6 +14,9 @@ WORLD_DEFS.forEach((w, i) => {
   assert.equal(w.order, i + 1);
   assert.ok(w.title && w.caption && !/\n/.test(w.caption), `${w.stationId} caption`);
   assert.equal((w.caption.match(/[.!?](\s|$)/g) || []).length, 1, `${w.stationId} is one sentence`);
+  assert.ok(w.headline && w.headline.length <= 44, `${w.stationId} has a short plain headline`);
+  assert.ok(w.story && w.story.length >= 180 && w.story.length <= 400, `${w.stationId} story fits six lines (${w.story.length})`);
+  assert.ok(w.bridge && w.bridge.length <= 260, `${w.stationId} ties the event to the offer (${w.bridge.length})`);
   assert.ok(!('chapters' in w) && !('image' in w) && !('detailImage' in w));
   assert.ok(w.live || /^https:\/\//.test(w.sourceUrl), `${w.stationId} source`);
   assert.ok(w.live || w.dateLabel, `${w.stationId} date label`);

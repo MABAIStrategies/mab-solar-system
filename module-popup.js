@@ -35,7 +35,7 @@
     <div class="mab-module-card" role="dialog" aria-modal="true" aria-labelledby="module-title" tabindex="-1">
       <button class="mab-module-x" type="button" data-module-close aria-label="Close">×</button>
       <div class="mab-module-viz"><canvas aria-hidden="true"></canvas></div>
-      <div class="mab-module-body"></div>
+      <div class="mab-module-body" data-lenis-prevent></div>
     </div>`;
   document.body.appendChild(root);
 

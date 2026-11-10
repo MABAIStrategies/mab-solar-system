@@ -39,12 +39,12 @@ const OFFER_NAMES = {
       }) : world.dateISO;
       assert.equal(shown.datetime, expected, `${id} date`);
       if (!world.live) assert.equal(shown.date, dateFor(world).label);
-      assert.equal(shown.caption, world.caption, `${id} caption`);
+      assert.equal(shown.caption, world.story, `${id} story`);
 
-      // Module opens by itself after the two-second hold.
+      // Module opens by itself once the reading hold ends.
       const t0 = Date.now();
-      await page.waitForSelector('.mab-module.open [role="dialog"]', { timeout: 4_000 });
-      assert.ok(Date.now() - t0 >= 1_200, `${id} module waits for the hold`);
+      await page.waitForSelector('.mab-module.open [role="dialog"]', { timeout: 14_000 });
+      assert.ok(Date.now() - t0 >= 6_000, `${id} module waits for the hold`);
       const title = await page.textContent('#module-title');
       assert.equal(title, OFFER_NAMES[world.offerId], `${id} maps to its offer`);
       assert.equal(await page.locator('.module-specs li').count(), 3);

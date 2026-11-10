@@ -73,7 +73,7 @@
     const world = window.MABWorldData?.worldForStation(stop.id);
     if (world) {
       actions.push(
-        `<button class="btn world-enter" type="button" data-world-station="${stop.id}"><span>Land at ${world.title}</span><small>See the moment and what it means for you</small></button>`
+        `<button class="btn world-enter" type="button" data-world-station="${stop.id}"><span>Land here: ${world.headline}</span><small>The full story and what it means for your business</small></button>`
       );
     }
     if (stop.primaryCal || stop.id === "convergence") {

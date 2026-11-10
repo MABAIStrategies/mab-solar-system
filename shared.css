@@ -306,7 +306,9 @@ html.flat #station-dwell, html.flat #world-journey, html.flat .skip-link { displ
 .tl-stop::before { content: ""; position: absolute; left: -28px; top: 34px; width: 11px; height: 11px; border-radius: 50%; background: var(--tl-accent, var(--cyan)); box-shadow: 0 0 14px var(--tl-accent, var(--cyan)); }
 .tl-kicker { font-family: var(--font-m); font-size: 11px; letter-spacing: .16em; text-transform: uppercase; color: var(--tl-accent, var(--cyan)); }
 .tl-stop h2 { font-family: var(--font-d); font-size: clamp(2rem, 7vw, 3.4rem); line-height: 1; margin: 8px 0 10px; letter-spacing: -.02em; }
-.tl-caption { font-size: 1.1rem; color: var(--ink); max-width: 52ch; }
+.tl-headline { font-size: clamp(1.4rem, 3vw, 2rem); line-height: 1.1; margin: .2em 0 .5em; color: var(--ink); }
+.tl-caption { font-size: 1.05rem; line-height: 1.6; color: var(--ink); max-width: 60ch; }
+.tl-bridge { max-width: 60ch; margin-top: .9em; padding-left: 14px; border-left: 2px solid var(--tl-accent, var(--cyan)); line-height: 1.55; }
 .tl-source { font-family: var(--font-m); font-size: 11px; color: var(--dim); text-decoration: underline; text-underline-offset: 3px; margin-left: 6px; white-space: nowrap; }
 .tl-offer { margin-top: 18px; padding-top: 18px; border-top: 1px solid var(--line); }
 .tl-offer h3 { font-family: var(--font-d); font-size: 1.3rem; }

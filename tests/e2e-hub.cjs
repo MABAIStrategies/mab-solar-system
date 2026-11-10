@@ -41,6 +41,21 @@ const { WORLD_DEFS } = require('../world-data.js');
       }
 
       step('stops ok');
+      // The audit panel (tallest: it holds the estimator) fits the screen and scrolls to its last line.
+      await page.evaluate(() => window.MABWorldJourney.open('origin'));
+      await page.waitForSelector('.mab-module.open', { timeout: 16_000 });
+      await page.waitForTimeout(700);
+      const card = await page.evaluate(() => { const c = document.querySelector('.mab-module-card').getBoundingClientRect(); return { top: c.top, bottom: c.bottom, vh: innerHeight }; });
+      assert.ok(card.top >= 0 && card.bottom <= card.vh + 1, `${label}: audit panel fits the screen (${Math.round(card.bottom)} of ${card.vh})`);
+      const mid = await page.$eval('.mab-module-body', (e) => { const r = e.getBoundingClientRect(); return { x: r.left + r.width / 2, y: r.top + r.height / 2 }; });
+      await page.mouse.move(mid.x, mid.y);
+      for (let i = 0; i < 12; i++) { await page.mouse.wheel(0, 240); await page.waitForTimeout(60); }
+      const note = await page.evaluate(() => { const n = document.querySelector('.mab-module-body').lastElementChild.getBoundingClientRect(); return { bottom: n.bottom, vh: innerHeight }; });
+      assert.ok(note.bottom <= note.vh, `${label}: audit panel scrolls to its last line (${Math.round(note.bottom)} of ${note.vh})`);
+      await page.keyboard.press('Escape');
+      await page.click('.world-close');
+      await page.waitForFunction(() => !document.body.classList.contains('world-open'), null, { timeout: 8_000 });
+
       // A real click on the last stop's button lands, then returning restores the hub.
       // The landing button's small label is fully readable (not running under the arrow).
       const fit = await page.evaluate(() => {
