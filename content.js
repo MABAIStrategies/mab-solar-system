@@ -84,6 +84,12 @@ window.MAB = {
         "Bring the brief you built on the way here",
         "No obligation",
       ],
+      // The plain page has no brief builder, so it points to the estimator instead.
+      specsFlat: [
+        "30 minutes · free · ROI roadmap included",
+        "Size your opportunity first with the estimator",
+        "No obligation",
+      ],
     },
   ],
 

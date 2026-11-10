@@ -72,9 +72,13 @@ async function assertFlat(page, label) {
       await page.keyboard.press('Escape');
       await page.waitForFunction(() => window.MABSpace && !document.body.classList.contains('intro-active'), null, { timeout: 120_000 });
       assert.equal(await page.evaluate(() => document.documentElement.classList.contains('flat')), false, 'desktop starts in 3D');
+      await page.evaluate(() => window.MABWorldJourney.open('origin'));
+      await page.waitForSelector('#world-journey.active');
       await page.evaluate(() => document.querySelector('#space-canvas').dispatchEvent(new Event('webglcontextlost', { bubbles: false, cancelable: true })));
       await assertFlat(page, 'context lost');
       assert.equal(await page.evaluate(() => getComputedStyle(document.body).overflowY !== 'hidden'), true, 'context lost: page scrolls');
+      assert.equal(await page.evaluate(() => !!window.__lenis || !!window.MABSpace), false, 'context lost: the 3D stage and scroll hijack are gone');
+      assert.equal(await page.evaluate(() => document.body.classList.contains('world-open')), false, 'context lost: no landing left open');
     }
     // 5. WebGL unavailable -> flat, and the 3D launch button is removed.
     {
@@ -151,6 +155,23 @@ async function assertFlat(page, label) {
       await page.waitForFunction(() => document.querySelector('#cf-status').classList.contains('ok'));
       assert.equal(posted, 1, 'valid form posts once');
       assert.equal(await page.inputValue('#cf-name'), '', 'form clears after sending');
+
+      // Formspree down + a message whose 1,500th character splits an emoji: still falls back cleanly.
+      await page.unroute('https://formspree.io/**');
+      await page.route('https://formspree.io/**', (r) => r.fulfill({ status: 500, contentType: 'application/json', body: '{}' }));
+      await page.fill('#cf-name', 'Zoë'); await page.fill('#cf-email', 'zoe@example.com');
+      for (const pad of [1440, 1441, 1442, 1443, 1444, 1445]) {
+        await page.fill('#cf-message', 'x'.repeat(pad) + '🚀'.repeat(40) + ' & "quotes"\nnew line');
+        await page.click('#cf-submit');
+        await page.waitForFunction(() => document.querySelector('#cf-status').classList.contains('err') && !document.querySelector('#cf-submit').disabled);
+        const href = await page.getAttribute('#cf-status a', 'href');
+        assert.ok(href && href.startsWith('mailto:mark@mabaistrategies.com?subject='), `fallback link built (pad ${pad})`);
+        assert.ok(href.length <= 2000, `fallback link fits mail clients (${href.length})`);
+        assert.doesNotThrow(() => decodeURIComponent(href.split('&body=')[1]));
+        await page.evaluate(() => { document.querySelector('#cf-status').className = 'form-status'; });
+      }
+      // The simulated outage logs a 500 per attempt; that is the scenario, not a defect.
+      { const mine = all[all.length - 1]; mine.splice(0, Infinity, ...mine.filter((m) => !/status of 500/.test(m))); }
 
       // Old URLs.
       for (const [from, to] of [['/services.html', '/services'], ['/about.html', '/about'], ['/contact.html', '/contact'],

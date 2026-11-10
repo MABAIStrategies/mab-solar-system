@@ -24,8 +24,11 @@
     journeyEnd.inert = true;
     const back = journeyEnd.querySelector("button");
     if (back) back.addEventListener("click", () => {
-      if (window.__lenis) window.__lenis.scrollTo(0, { duration: 1.6 });
-      else window.scrollTo({ top: 0, behavior: "smooth" });
+      transitTargetId = "origin"; // pass the stops on the way back without holding at each
+      if (window.__lenis) {
+        try { window.__lenis.start(); } catch (_) {}
+        window.__lenis.scrollTo(0, { duration: 1.6, force: true });
+      } else window.scrollTo({ top: 0, behavior: "smooth" });
     });
   }
   const rail = document.getElementById("journey-rail");

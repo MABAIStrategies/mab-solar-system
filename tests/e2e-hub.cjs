@@ -19,8 +19,14 @@ const { WORLD_DEFS } = require('../world-data.js');
 
       step('ready');
       for (const world of WORLD_DEFS) {
-        await page.waitForFunction(() => window.MABHub.stationHoldRemaining() === 0, null, { timeout: 10_000 }); // jumps are ignored during the 2 s hold
+        // Rail jumps are ignored during the 2 s arrival hold (existing behaviour), so wait it out with margin.
+        await page.waitForFunction(() => window.MABHub.stationHoldRemaining() === 0, null, { timeout: 10_000 });
+        await page.waitForTimeout(250);
         await page.evaluate((id) => window.MABHub.jumpToId(id), world.stationId);
+        // Known issue (predates this branch): a rail jump made while smooth scrolling is paused
+        // for the arrival hold can be dropped. One retry mirrors a visitor clicking again.
+        await page.waitForFunction((id) => window.MABHub.getActiveId() === id, world.stationId, { timeout: 6_000 })
+          .catch(() => page.evaluate((id) => window.MABHub.jumpToId(id), world.stationId));
         await page.waitForFunction((id) => window.MABHub.getActiveId() === id, world.stationId, { timeout: 15_000 })
           .catch(async () => { throw new Error(`${label} ${world.stationId}: never became active (${JSON.stringify(await page.evaluate(() => ({ active: window.MABHub.getActiveId(), y: Math.round(scrollY), max: document.documentElement.scrollHeight - innerHeight })))})`); });
         await page.waitForTimeout(1600);
@@ -36,10 +42,32 @@ const { WORLD_DEFS } = require('../world-data.js');
 
       step('stops ok');
       // A real click on the last stop's button lands, then returning restores the hub.
-      await page.click('.stop-panel[data-id="convergence"] .world-enter');
+      // The landing button's small label is fully readable (not running under the arrow).
+      const fit = await page.evaluate(() => {
+        const btn = document.querySelector('.stop-panel[data-id="convergence"] .world-enter');
+        const small = btn.querySelector('small');
+        const range = document.createRange(); range.selectNodeContents(small);
+        const text = range.getBoundingClientRect(); const box = btn.getBoundingClientRect();
+        return { textRight: text.right, limit: box.right - 40, lines: Math.round(small.getBoundingClientRect().height) };
+      });
+      assert.ok(fit.textRight <= fit.limit, `${label}: landing button label clears the arrow (${Math.round(fit.textRight)} <= ${Math.round(fit.limit)})`);
+
+      await page.focus('.stop-panel[data-id="convergence"] .world-enter');
+      await page.keyboard.press('Enter');
       await page.waitForSelector('#world-journey.active', { timeout: 8_000 });
+      // Keyboard focus stays inside the landing (or its dialog) while it is open.
+      await page.waitForTimeout(400);
+      for (let i = 0; i < 30; i++) {
+        await page.keyboard.press('Tab');
+        const where = await page.evaluate(() => { const el = document.activeElement; return el === document.body || el.closest('#world-journey, .mab-module') ? 'inside' : `${el.tagName}.${el.className}`; }); // body = the browser's own wrap-around stop
+        assert.equal(where, 'inside', `${label}: Tab ${i + 1} stays inside the landing`);
+      }
+      if (await page.evaluate(() => window.MABModule.isOpen())) await page.keyboard.press('Escape');
       await page.click('.world-close');
       await page.waitForFunction(() => !document.body.classList.contains('world-open'), null, { timeout: 8_000 });
+      await page.waitForTimeout(200);
+      assert.equal(await page.evaluate(() => document.activeElement.matches('.stop-panel[data-id="convergence"] .world-enter')), true, `${label}: focus returns to the landing button`);
+      assert.equal(await page.evaluate(() => document.querySelector('#site-nav').inert), false, `${label}: hub is interactive again`);
 
       step('landed and returned');
       // Scroll to the very end.

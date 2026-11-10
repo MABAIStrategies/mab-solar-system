@@ -80,7 +80,11 @@
   document.addEventListener(
     "webglcontextlost",
     (event) => {
-      if (event.target && event.target.id === "space-canvas") enable();
+      if (!event.target || event.target.id !== "space-canvas" || active) return;
+      // The 3D stage (smooth scroll, scroll triggers, an open landing) cannot be unwound
+      // reliably, so reload straight into the plain page and keep it for this visit.
+      try { sessionStorage.setItem(KEY, "1"); } catch (_) { /* the query string carries it */ }
+      location.replace(location.pathname + "?flat=1");
     },
     true
   );

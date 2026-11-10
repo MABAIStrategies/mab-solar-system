@@ -148,12 +148,29 @@
     track("module_trigger", { stop: world.stationId, trigger });
   }
 
+  // While a landing is open, everything behind it is taken out of the tab order and the
+  // accessibility tree; closing puts it back and returns focus to where the visitor was.
+  let opener = null;
+  let madeInert = [];
+  function setBackgroundInert(on) {
+    if (on) {
+      madeInert = [...document.body.children].filter(
+        (el) => el !== root && !el.classList.contains("mab-module") && !/^(SCRIPT|STYLE|LINK)$/.test(el.tagName) && !el.inert
+      );
+      madeInert.forEach((el) => { el.inert = true; });
+    } else {
+      madeInert.forEach((el) => { el.inert = false; });
+      madeInert = [];
+    }
+  }
+
   function open(stationId) {
     const world = worldForStation(stationId);
     if (!world) return false;
     if (activeWorld) return activeWorld.stationId === stationId;
 
     activeWorld = world;
+    opener = document.activeElement instanceof HTMLElement ? document.activeElement : null;
     moduleSeen = false;
     savedHubY = window.scrollY;
     const offer = offerFor(world);
@@ -179,6 +196,7 @@
 
     root.setAttribute("aria-hidden", "false");
     document.body.classList.add("world-open");
+    setBackgroundInert(true);
     requestAnimationFrame(() => {
       root.classList.add("active");
       openButton.focus({ preventScroll: true });
@@ -206,6 +224,7 @@
         root.classList.remove("active", "exiting", "module-seen");
         root.setAttribute("aria-hidden", "true");
         document.body.classList.remove("world-open");
+        setBackgroundInert(false);
         window.scrollTo(0, savedHubY);
         if (window.__lenis) {
           try { window.__lenis.scrollTo(savedHubY, { immediate: true }); } catch (_) {}
@@ -216,6 +235,8 @@
           })
         );
         if (typeof after === "function") after();
+        else if (opener && opener.isConnected) opener.focus({ preventScroll: true });
+        opener = null;
       },
       reduceMotion ? 80 : 620
     );

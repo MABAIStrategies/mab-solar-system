@@ -406,3 +406,6 @@ html.flat #station-dwell, html.flat #world-journey, html.flat .skip-link { displ
   .nav-pill a[href="/"]:not(.brand), .nav-pill a[href="/portal"] { display: none !important; }
   .nav-pill a.nav-cta { padding: 9px 13px; }
 }
+
+.contact-form .form-status a { color: inherit; text-decoration: underline; }
+#estimator { scroll-margin-top: 110px; }

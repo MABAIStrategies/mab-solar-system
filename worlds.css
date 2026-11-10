@@ -58,6 +58,7 @@ html, body { scroll-snap-type: none !important; }
 .world-enter {
   position: relative;
   min-width: 220px;
+  padding-right: 48px !important; /* room for the arrow */
   overflow: hidden;
   text-align: left !important;
   border-color: color-mix(in srgb, var(--cyan, #55ddff) 75%, white 15%) !important;
@@ -74,7 +75,7 @@ html, body { scroll-snap-type: none !important; }
   color: #9ceaff;
 }
 .world-enter span, .world-enter small { display: block; }
-.world-enter small { margin-top: 3px; color: rgba(224,244,255,.58); font-size: 9px; letter-spacing: .13em; text-transform: uppercase; }
+.world-enter small { margin-top: 3px; white-space: normal; line-height: 1.5; color: rgba(224,244,255,.58); font-size: 9px; letter-spacing: .13em; text-transform: uppercase; }
 
 /* Two-second arrival status. */
 #station-dwell {

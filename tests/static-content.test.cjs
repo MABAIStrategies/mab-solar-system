@@ -22,6 +22,8 @@ vm.runInNewContext(read('content.js'), box);
 const MAB = box.window.MAB;
 for (const offer of MAB.offers) assert.ok(index.includes(`<h3>${offer.name}</h3>`), `${offer.name} is in the page`);
 assert.equal((index.match(/class="tl-stop"/g) || []).length, 7, 'seven crawlable stops');
+assert.ok(!index.includes('the brief you built'), 'flat page does not mention a brief it cannot build');
+assert.ok(index.includes('href="/services#estimator"'), 'flat page points to the estimator');
 const ld = [...index.matchAll(/<script type="application\/ld\+json">(.*?)<\/script>/gs)].map((m) => JSON.parse(m[1]));
 assert.equal(ld.length, 3, 'three JSON-LD blocks');
 assert.deepEqual(ld.map((d) => d['@type'] || 'graph'), ['Organization', 'Person', 'graph']);

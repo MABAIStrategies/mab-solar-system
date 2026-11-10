@@ -19,9 +19,19 @@
     status.textContent = text;
   }
 
+  // Built one character at a time under an encoded-length cap, so an emoji is never cut in
+  // half and the link stays short enough for mail apps.
   function mailto(p) {
-    const body = `Name: ${p.name}\nEmail: ${p.email}\nCompany: ${p.company || "-"}\nTopic: ${p.service || "-"}\n\n${p.message}`.slice(0, 1500);
-    return `mailto:${email}?subject=${encodeURIComponent("Website inquiry from " + p.name)}&body=${encodeURIComponent(body)}`;
+    const head = `mailto:${email}?subject=${encodeURIComponent("Website inquiry from " + p.name.slice(0, 80))}&body=`;
+    const text = `Name: ${p.name}\nEmail: ${p.email}\nCompany: ${p.company || "-"}\nTopic: ${p.service || "-"}\n\n${p.message}`;
+    let body = "";
+    for (const ch of text) {
+      let enc;
+      try { enc = encodeURIComponent(ch); } catch (_) { continue; } // lone surrogate
+      if (head.length + body.length + enc.length > 1900) break;
+      body += enc;
+    }
+    return head + body;
   }
 
   form.addEventListener("submit", async (event) => {
@@ -56,8 +66,14 @@
       say("ok", "Sent. Mark will reply within one business day.");
       if (window.MABTrack) window.MABTrack("contact_sent", { topic: payload.service || "none" });
     } catch (_) {
-      say("err", "That didn't go through. Your mail app is opening with the message filled in, or write to " + email + ".");
-      window.location.href = mailto(payload);
+      const href = mailto(payload);
+      status.className = "form-status err";
+      status.textContent = "That didn't go through. ";
+      const link = document.createElement("a");
+      link.href = href;
+      link.textContent = "Send it from your mail app instead";
+      status.append(link, ", or write to " + email + ".");
+      window.location.href = href;
     } finally {
       button.disabled = false;
     }

@@ -113,8 +113,8 @@ function timeline() {
       <div class="tl-offer">
         <h3>${esc(o.name)}</h3>
         <p>${esc(o.blurb)}</p>
-        <ul>${o.specs.map((s) => `<li>${esc(s)}</li>`).join("")}</ul>
-        <a class="btn${w.live ? " primary-solid" : ""}" href="${w.live ? esc(MAB.contact.cal) : "/services"}"${w.live ? ' target="_blank" rel="noopener"' : ""}>${w.live ? "Book the briefing" : "See services and pricing"}</a>
+        <ul>${(o.specsFlat || o.specs).map((s) => `<li>${esc(s)}</li>`).join("")}</ul>
+        <a class="btn${w.live ? " primary-solid" : ""}" href="${w.live ? esc(MAB.contact.cal) : w.offerId === "audit" ? "/services#estimator" : "/services"}"${w.live ? ' target="_blank" rel="noopener"' : ""}>${w.live ? "Book the briefing" : w.offerId === "audit" ? "Size it with the estimator" : "See services and pricing"}</a>
       </div>
     </article>`;
   }).join("\n");
