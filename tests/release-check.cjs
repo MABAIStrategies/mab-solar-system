@@ -10,7 +10,10 @@ const OLD = { '/services.html': '/services', '/about.html': '/about', '/contact.
   '/privacy-policy.html': '/privacy', '/terms-of-service.html': '/terms', '/refund-policy.html': '/refunds' };
 const HEADERS = ['strict-transport-security', 'x-content-type-options', 'referrer-policy', 'permissions-policy', 'content-security-policy'];
 
-const get = (url, opts = {}) => fetch(url, { redirect: 'follow', signal: AbortSignal.timeout(20_000), ...opts });
+// COOKIE lets the check run against a Vercel preview behind deployment protection.
+const cookie = process.env.COOKIE;
+const get = (url, opts = {}) => fetch(url, { redirect: 'follow', signal: AbortSignal.timeout(20_000), ...opts,
+  headers: { ...(cookie && url.startsWith(origin) ? { cookie } : {}), ...(opts.headers || {}) } });
 
 (async () => {
   const failures = [];
