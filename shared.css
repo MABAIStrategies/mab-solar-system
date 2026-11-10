@@ -409,3 +409,11 @@ html.flat #station-dwell, html.flat #world-journey, html.flat .skip-link { displ
 
 .contact-form .form-status a { color: inherit; text-decoration: underline; }
 #estimator { scroll-margin-top: 110px; }
+
+/* Pricing guide groups */
+.price-group { margin-top: 28px; }
+.group-title { font-family: var(--font-m); font-size: 12px; letter-spacing: .16em; text-transform: uppercase; color: var(--dim); font-weight: 500; margin-bottom: 12px; }
+.tier h4 { font-family: var(--font-d); font-size: 1.25rem; }
+.price.words { font-size: 1.35rem; color: var(--dim); }
+.price span { white-space: nowrap; }
+.card-price { margin-top: 12px; font-family: var(--font-m); font-size: 11px; letter-spacing: .08em; color: var(--dim); }

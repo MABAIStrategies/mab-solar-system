@@ -110,10 +110,12 @@ async function assertFlat(page, label) {
 
       // Services: prices, fallback buttons, estimator.
       await page.goto(`${BASE_URL}/services`, { waitUntil: 'load' });
-      assert.deepEqual(await page.$$eval('#tiers .price', (els) => els.map((e) => e.firstChild.textContent.trim())), ['$2,500', '$5,500', 'Custom']);
-      assert.deepEqual(await page.$$eval('#standalone .price', (els) => els.map((e) => e.textContent.trim())), ['$2,000', '$3,500+', 'Custom']);
-      assert.equal(await page.locator('#tier-terms').textContent(), 'Billed monthly, cancel anytime after 90 days.');
-      assert.deepEqual(await page.$$eval('#tiers .btn, #standalone .btn', (els) => [...new Set(els.map((e) => e.textContent.trim()))]), ['Book a call'], 'no pay links yet -> every tier books a call');
+      assert.deepEqual(await page.$$eval('#pricing h3.group-title', (els) => els.map((e) => e.textContent)), ['Start here', 'Monthly retainers', 'AI strategy and company training', 'Custom work and the library']);
+      assert.deepEqual(await page.$$eval('#pricing .price', (els) => els.map((e) => e.firstChild.textContent.trim())),
+        ['$2,000', 'Ask for pricing', '$1,000', '$800', '$5,000–$25,000', '$500', '$1,000', '$120', 'Talk to sales', 'From $250']);
+      assert.deepEqual(await page.$$eval('#pricing .tier > .btn', (els) => [...new Set(els.map((e) => e.textContent.trim()))]).then((l) => l.sort()), ['Book a call', 'Browse the library']);
+      assert.equal(await page.locator('#pricing a[href="/command"]').count(), 1);
+      assert.equal(await page.locator('#tier-terms').count(), 0);
       assert.equal(await page.locator('#services .card').count(), 6);
       assert.deepEqual(await page.$$eval('#proof-groups h3', (els) => els.map((e) => e.textContent)), ["Founder's career record", 'Built at MAB']);
       const before = await page.locator('#estimator [data-est="dollars"]').textContent();

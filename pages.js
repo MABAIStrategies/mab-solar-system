@@ -48,33 +48,25 @@
       .map((o) => `<article class="card" id="offer-${esc(o.id)}"><h3>${esc(o.name)}</h3><p>${esc(o.blurb)}</p>${list(o.specs)}</article>`)
       .join("");
   }
-  const tiers = $("tiers");
-  if (tiers) {
-    tiers.innerHTML = M.tiers
+  const pricing = $("pricing");
+  if (pricing && M.pricing) {
+    pricing.innerHTML = M.pricing
       .map(
-        (t) => `<article class="tier${t.badge ? " featured" : ""}">
-        ${t.badge ? `<span class="badge">${esc(t.badge)}</span>` : ""}
-        <h3>${esc(t.name)}</h3>
-        <div class="price">${esc(t.price)} <span>${esc(t.unit)}</span></div>
-        <p class="muted">${esc(t.desc)}</p>
-        ${list(t.features)}
-        ${buyButton(t)}
-      </article>`
-      )
-      .join("");
-  }
-  const terms = $("tier-terms");
-  if (terms) terms.textContent = M.tierTerms || "";
-  const standalone = $("standalone");
-  if (standalone) {
-    standalone.innerHTML = M.standalone
-      .map(
-        (s) => `<article class="tier">
-        <h3>${esc(s.name)}</h3>
-        <div class="price">${esc(s.price)}</div>
-        ${list(s.features)}
-        ${buyButton(s)}
-      </article>`
+        (group) => `<section class="price-group" aria-labelledby="pg-${esc(group.id)}">
+        <h3 class="group-title" id="pg-${esc(group.id)}">${esc(group.title)}</h3>
+        <div class="tiers">${group.items
+          .map(
+            (t) => `<article class="tier${t.badge ? " featured" : ""}" id="price-${esc(t.id)}">
+            ${t.badge ? `<span class="badge">${esc(t.badge)}</span>` : ""}
+            <h4>${esc(t.name)}</h4>
+            <div class="price${/^\$|^From \$/.test(t.price) ? "" : " words"}">${esc(t.price)}${t.unit ? ` <span>${esc(t.unit)}</span>` : ""}</div>
+            ${t.desc ? `<p class="muted">${esc(t.desc)}</p>` : ""}
+            ${list(t.features)}
+            ${t.href ? `<a class="btn" href="${esc(t.href)}">${esc(t.cta || "Learn more")}</a>` : buyButton(t)}
+          </article>`
+          )
+          .join("")}</div>
+      </section>`
       )
       .join("");
   }
@@ -117,6 +109,7 @@
           <h3>${esc(v.name)}</h3>
           <p>${esc(v.blurb)}</p>
           <p class="tags">${v.tags.map((t) => `<i>${esc(t)}</i>`).join("")}</p>
+          <p class="card-price">${v.price ? esc(v.price) : "Price on request"}</p>
         </article>`
             )
             .join("")

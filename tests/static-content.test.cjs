@@ -48,7 +48,8 @@ for (const name of ['portal', 'command']) {
   for (const gone of ['localStorage', 'password', '4242']) assert.ok(!html.includes(gone), `${name} has no ${gone}`);
 }
 const services = read('services.html');
-assert.ok(services.includes('id="tiers"') && services.includes('id="standalone"') && services.includes('id="estimator"'));
+assert.ok(services.includes('id="pricing"') && services.includes('id="estimator"'));
+for (const f of ['privacy.html', 'terms.html']) assert.ok(!/template and should be reviewed/.test(read(f)), `${f}: template footnote removed at Mark's direction`);
 
 // Legal wording is ported unchanged: spot-check sentences from the live pages.
 assert.ok(read('refunds.html').includes('Refund requests must be submitted in writing within 14 calendar days of the disputed invoice date.'));
