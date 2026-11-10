@@ -26,7 +26,7 @@ const ld = [...index.matchAll(/<script type="application\/ld\+json">(.*?)<\/scri
 assert.equal(ld.length, 3, 'three JSON-LD blocks');
 assert.deepEqual(ld.map((d) => d['@type'] || 'graph'), ['Organization', 'Person', 'graph']);
 assert.equal(ld[2]['@graph'].length, 6, 'one Service per paid offer');
-assert.ok(index.includes('<link rel="canonical" href="https://mabaistrategies.com/">'));
+assert.ok(index.includes('<link rel="canonical" href="https://www.mabaistrategies.com/">'));
 assert.ok(index.indexOf('"flat.js"') < index.indexOf('<style>'), 'flat mode is decided before first paint');
 
 const PAGES = ['index', 'services', 'command', 'about', 'contact', 'portal', 'privacy', 'terms', 'refunds', '404'];
@@ -76,10 +76,10 @@ assert.ok(!/unpkg|jsdelivr|cdnjs/.test(csp + index), 'no third-party script host
 
 const sitemap = read('sitemap.xml');
 for (const url of ['/', '/services', '/command', '/about', '/contact', '/privacy', '/terms', '/refunds']) {
-  assert.ok(sitemap.includes(`<loc>https://mabaistrategies.com${url}</loc>`), `sitemap lists ${url}`);
+  assert.ok(sitemap.includes(`<loc>https://www.mabaistrategies.com${url}</loc>`), `sitemap lists ${url}`);
 }
 assert.ok(!sitemap.includes('/portal'), 'billing page is not in the sitemap');
-assert.ok(read('robots.txt').includes('Sitemap: https://mabaistrategies.com/sitemap.xml'));
+assert.ok(read('robots.txt').includes('Sitemap: https://www.mabaistrategies.com/sitemap.xml'));
 for (const asset of ['mab-logo.png', 'mab-logo-256.png', 'mark-bockrath.jpg', 'og.jpg', 'icon-32.png', 'icon-180.png', 'icon-192.png']) {
   assert.ok(fs.statSync(path.join(root, 'assets', asset)).size > 500, `${asset} exists`);
 }

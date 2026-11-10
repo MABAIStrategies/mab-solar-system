@@ -14,7 +14,7 @@ const path = require("node:path");
 const vm = require("node:vm");
 
 const root = path.resolve(__dirname, "..");
-const SITE = "https://mabaistrategies.com";
+const SITE = "https://www.mabaistrategies.com";
 const check = process.argv.includes("--check");
 
 const { WORLD_DEFS } = require(path.join(root, "world-data.js"));

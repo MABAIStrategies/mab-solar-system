@@ -1,6 +1,6 @@
 # MAB AI Strategies website
 
-The company site for [MAB AI Strategies](https://mabaistrategies.com): a 3D flight through six
+The company site for [MAB AI Strategies](https://www.mabaistrategies.com): a 3D flight through six
 moments in AI history, each introducing one service, with a plain-HTML version of the same
 content for phones, reduced motion and crawlers.
 
