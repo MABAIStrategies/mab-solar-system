@@ -116,15 +116,15 @@ window.MAB = {
             "Detailed readout and printed blueprint within 48 hours",
             "1-hour follow-up strategy meeting with Mark",
           ],
-          payLink: null,
+          payLink: "https://buy.stripe.com/28EcN6eumdND2laezx2VG01",
         },
         {
           id: "audit-workflow",
           name: "Audit + Workflow Bundle",
-          price: "Ask for pricing",
+          price: "$3,000",
           desc: "The discovery meeting, plus your first workflow live the same week.",
           features: ["Discovery meeting", "One workflow built and implemented within 72 hours"],
-          payLink: null,
+          payLink: "https://buy.stripe.com/aFa3cw9a2bFvbVK6312VG02",
         },
       ],
     },
@@ -139,7 +139,7 @@ window.MAB = {
           unit: "/ month",
           desc: "A steady build cadence for a team getting started.",
           features: ["One workflow built and implemented each month", "6-month minimum"],
-          payLink: null,
+          payLink: "https://buy.stripe.com/6oU00k0DwgZPaRGfDB2VG03",
         },
         {
           id: "google",
@@ -149,7 +149,7 @@ window.MAB = {
           badge: "GOOGLE WORKSPACE",
           desc: "For teams that run on Google.",
           features: ["One Google-specific workflow each month", "8-month minimum"],
-          payLink: null,
+          payLink: "https://buy.stripe.com/9B6eVe85Y24V5xm4YX2VG04",
         },
         {
           id: "senior",
@@ -179,7 +179,7 @@ window.MAB = {
           unit: "per department",
           desc: "Scope where AI fits, one department or the whole company.",
           features: ["Select departments: $500 each", "Full company: $1,000–$2,000"],
-          payLink: null,
+          payLink: "https://buy.stripe.com/9B600k71UeRH4ti7752VG05",
         },
         {
           id: "exec-training",
@@ -188,7 +188,7 @@ window.MAB = {
           unit: "per 5 seats",
           desc: "For the people who set direction and sign off on spend.",
           features: ["1–5 seats: $1,000", "6–10 seats: $2,000", "11–15 seats: $3,000, and so on"],
-          payLink: null,
+          payLink: "https://buy.stripe.com/eVq9AUgCu10R9NC0IH2VG06",
         },
         {
           id: "team-coaching",
@@ -197,7 +197,7 @@ window.MAB = {
           unit: "per seat, per session",
           desc: "Hands-on sessions for the people doing the work.",
           features: ["Priced per seat for each session", "Built around your team's own workflows"],
-          payLink: null,
+          payLink: "https://buy.stripe.com/9B66oIae638Z4tigHF2VG07",
         },
       ],
     },
@@ -228,7 +228,7 @@ window.MAB = {
   ],
 
   // Stripe-hosted. Filled in once the live links exist; null renders the fallback.
-  billing: { portalLoginUrl: null },
+  billing: { portalLoginUrl: "https://billing.stripe.com/p/login/6oU28scmedNDbVK0IH2VG00" },
 
   about: {
     name: "Mark Bockrath",

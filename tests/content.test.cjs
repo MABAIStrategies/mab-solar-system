@@ -25,7 +25,7 @@ const items = Object.fromEntries(MAB.pricing.flatMap((g) => g.items).map((i) => 
 assert.deepEqual(Object.keys(items), ['audit', 'audit-workflow', 'junior', 'google', 'senior', 'discovery', 'exec-training', 'team-coaching', 'custom-build', 'library']);
 assert.deepEqual(Object.fromEntries(Object.entries(items).map(([k, v]) => [k, [v.price, v.unit || '']])), {
   audit: ['$2,000', ''],
-  'audit-workflow': ['Ask for pricing', ''],
+  'audit-workflow': ['$3,000', ''],
   junior: ['$1,000', '/ month'],
   google: ['$800', '/ month'],
   senior: ['$5,000–$25,000', 'build'],
@@ -45,7 +45,13 @@ assert.match(text('senior'), /6 months.*9 months.*12 months/); assert.match(text
 assert.match(text('discovery'), /\$1,000–\$2,000/);
 assert.match(text('exec-training'), /6–10 seats: \$2,000/); assert.match(text('exec-training'), /11–15 seats: \$3,000/);
 for (const i of Object.values(items)) assert.ok('payLink' in i, i.id);
-assert.deepEqual(Object.values(items).filter((i) => i.payLink !== null).map((i) => i.id), [], 'no Stripe links wired yet');
+assert.deepEqual(
+  Object.values(items).filter((i) => i.payLink !== null).map((i) => i.id).sort(),
+  ['audit', 'audit-workflow', 'discovery', 'exec-training', 'google', 'junior', 'team-coaching'],
+  'fixed-price items have a Stripe link; quoted items do not'
+);
+for (const i of Object.values(items)) if (i.payLink) assert.match(i.payLink, /^https:\/\/buy\.stripe\.com\/[A-Za-z0-9]+$/, `${i.id} link`);
+assert.match(MAB.billing.portalLoginUrl, /^https:\/\/billing\.stripe\.com\/p\/login\//);
 assert.equal(items.library.href, '/command');
 assert.ok('portalLoginUrl' in MAB.billing);
 assert.ok(!('portalDemo' in MAB) && !('quote' in MAB) && !('stats' in MAB) && !('phases' in MAB));

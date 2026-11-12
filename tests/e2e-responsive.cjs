@@ -112,8 +112,8 @@ async function assertFlat(page, label) {
       await page.goto(`${BASE_URL}/services`, { waitUntil: 'load' });
       assert.deepEqual(await page.$$eval('#pricing h3.group-title', (els) => els.map((e) => e.textContent)), ['Start here', 'Monthly retainers', 'AI strategy and company training', 'Custom work and the library']);
       assert.deepEqual(await page.$$eval('#pricing .price', (els) => els.map((e) => e.firstChild.textContent.trim())),
-        ['$2,000', 'Ask for pricing', '$1,000', '$800', '$5,000–$25,000', '$500', '$1,000', '$120', 'Talk to sales', 'From $250']);
-      assert.deepEqual(await page.$$eval('#pricing .tier > .btn', (els) => [...new Set(els.map((e) => e.textContent.trim()))]).then((l) => l.sort()), ['Book a call', 'Browse the library']);
+        ['$2,000', '$3,000', '$1,000', '$800', '$5,000–$25,000', '$500', '$1,000', '$120', 'Talk to sales', 'From $250']);
+      assert.deepEqual(await page.$$eval('#pricing .tier > .btn', (els) => [...new Set(els.map((e) => e.textContent.trim()))]).then((l) => l.sort()), ['Book a call', 'Browse the library', 'Start now']);
       assert.equal(await page.locator('#pricing a[href="/command"]').count(), 1);
       assert.equal(await page.locator('#tier-terms').count(), 0);
       assert.equal(await page.locator('#services .card').count(), 6);
@@ -138,7 +138,7 @@ async function assertFlat(page, label) {
 
       // Billing: no link configured yet -> email fallback; ?paid=1 shows the receipt note.
       await page.goto(`${BASE_URL}/portal`, { waitUntil: 'load' });
-      assert.match(await page.locator('#billing-action a').getAttribute('href'), /^mailto:mark@mabaistrategies\.com/);
+      assert.match(await page.locator('#billing-action a').getAttribute('href'), /^https:\/\/billing\.stripe\.com\/p\/login\//);
       assert.equal(await page.locator('#paid-notice').isVisible(), false);
       await page.goto(`${BASE_URL}/portal?paid=1`, { waitUntil: 'load' });
       assert.equal(await page.locator('#paid-notice').isVisible(), true);
